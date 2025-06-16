@@ -1,3 +1,4 @@
+
 import type { Config } from "tailwindcss";
 
 export default {
@@ -18,7 +19,17 @@ export default {
 			}
 		},
 		extend: {
+			fontFamily: {
+				'space-grotesk': ['Space Grotesk', 'sans-serif'],
+				'darker-grotesque': ['Darker Grotesque', 'sans-serif'],
+			},
 			colors: {
+				'saikou': {
+					primary: '#94FFC9',
+					secondary: '#222222',
+					background: '#EFFFF6',
+					accent: '#00D4AA',
+				},
 				border: 'hsl(var(--border))',
 				input: 'hsl(var(--input))',
 				ring: 'hsl(var(--ring))',
