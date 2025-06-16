@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import {
@@ -68,6 +67,9 @@ const Index = () => {
               <span className="text-xs text-gray-600 font-darker-grotesque font-medium -mt-1">Made in India</span>
             </Link>
             <div className="hidden md:flex items-center gap-8">
+              <Link to="/products" className="text-saikou-secondary font-darker-grotesque font-medium hover:text-saikou-accent transition-colors">
+                Products
+              </Link>
               <button onClick={() => scrollToSection('collections')} className="text-saikou-secondary font-darker-grotesque font-medium hover:text-saikou-accent transition-colors">
                 Collections
               </button>
@@ -155,12 +157,12 @@ const Index = () => {
               >
                 Explore Collections
               </button>
-              <button 
-                onClick={() => scrollToSection('featured-products')}
-                className="border-2 border-saikou-primary text-saikou-secondary px-8 py-3 rounded-lg font-darker-grotesque font-semibold hover:bg-saikou-primary transition-all"
+              <Link 
+                to="/products"
+                className="border-2 border-saikou-primary text-saikou-secondary px-8 py-3 rounded-lg font-darker-grotesque font-semibold hover:bg-saikou-primary transition-all text-center"
               >
-                New Arrivals
-              </button>
+                View All Products
+              </Link>
             </div>
           </div>
           
@@ -212,10 +214,18 @@ const Index = () => {
         </div>
       </section>
 
-      {/* Featured Products Section */}
+      {/* Featured Products Section - Now shows only 3 products */}
       <section id="featured-products" className="py-16 bg-saikou-background">
         <div className="container mx-auto px-4">
-          <h2 className="text-4xl font-space-grotesk font-bold text-center mb-12 text-saikou-secondary">Featured Products</h2>
+          <div className="flex justify-between items-center mb-12">
+            <h2 className="text-4xl font-space-grotesk font-bold text-saikou-secondary">Featured Products</h2>
+            <Link 
+              to="/products"
+              className="bg-saikou-primary text-saikou-secondary px-6 py-3 rounded-lg font-darker-grotesque font-semibold hover:bg-saikou-accent hover:text-white transition-all"
+            >
+              View All Products
+            </Link>
+          </div>
           <div className="grid md:grid-cols-3 gap-8">
             {featuredProducts.map((product) => (
               <div key={product.id} className="bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition-shadow">
@@ -351,6 +361,7 @@ const Index = () => {
               <p className="font-darker-grotesque opacity-80">Premium collectibles. Made in India.</p>
             </div>
             <div className="flex flex-wrap gap-6 justify-center">
+              <Link to="/products" className="font-darker-grotesque opacity-80 hover:opacity-100 transition-opacity">Products</Link>
               <button onClick={() => scrollToSection('collections')} className="font-darker-grotesque opacity-80 hover:opacity-100 transition-opacity">Collections</button>
               <button onClick={() => scrollToSection('about')} className="font-darker-grotesque opacity-80 hover:opacity-100 transition-opacity">About</button>
               <button onClick={() => scrollToSection('contact')} className="font-darker-grotesque opacity-80 hover:opacity-100 transition-opacity">Contact</button>
