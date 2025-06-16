@@ -1,5 +1,13 @@
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselNext,
+  CarouselPrevious,
+} from "@/components/ui/carousel";
 
 const Index = () => {
   const [cart, setCart] = useState<Array<{id: string, name: string, price: string}>>([]);
@@ -22,16 +30,43 @@ const Index = () => {
     }
   };
 
+  const featuredProducts = [
+    {
+      id: '1',
+      name: 'Superman Premium Action Figure',
+      price: '₹4,999',
+      image: '/lovable-uploads/3c35d07e-c58f-4fb2-8ba1-7aa5ed88a07f.png',
+      badge: 'Premium',
+      collection: 'Saikou Collection'
+    },
+    {
+      id: '2', 
+      name: 'Hulk Patreon Edition Statue',
+      price: '₹6,499',
+      image: '/lovable-uploads/8940d71d-abcb-4bb1-898b-4e5efeb18613.png',
+      badge: 'Limited',
+      collection: 'Saikou Collection'
+    },
+    {
+      id: '3',
+      name: 'Anime Warrior Dark Edition',
+      price: '₹5,999', 
+      image: '/lovable-uploads/f753d099-696b-46b8-a5ec-44a8a086abb7.png',
+      badge: 'Exclusive',
+      collection: 'Ikon Collection'
+    }
+  ];
+
   return (
     <div className="min-h-screen">
       {/* Header Section */}
       <header className="fixed top-0 left-0 right-0 bg-white shadow-lg z-50">
         <nav className="container mx-auto px-4 py-4">
           <div className="flex justify-between items-center">
-            <div className="flex flex-col">
+            <Link to="/" className="flex flex-col">
               <h1 className="text-2xl font-space-grotesk font-bold text-saikou-secondary">Saikou</h1>
               <span className="text-xs text-gray-600 font-darker-grotesque font-medium -mt-1">Made in India</span>
-            </div>
+            </Link>
             <div className="hidden md:flex items-center gap-8">
               <button onClick={() => scrollToSection('collections')} className="text-saikou-secondary font-darker-grotesque font-medium hover:text-saikou-accent transition-colors">
                 Collections
@@ -42,20 +77,70 @@ const Index = () => {
               <button onClick={() => scrollToSection('contact')} className="text-saikou-secondary font-darker-grotesque font-medium hover:text-saikou-accent transition-colors">
                 Contact
               </button>
-              <button className="bg-saikou-primary text-saikou-secondary px-4 py-2 rounded-lg flex items-center gap-2 font-darker-grotesque font-semibold hover:bg-saikou-accent hover:text-white transition-all">
+              <Link to="/cart" className="bg-saikou-primary text-saikou-secondary px-4 py-2 rounded-lg flex items-center gap-2 font-darker-grotesque font-semibold hover:bg-saikou-accent hover:text-white transition-all">
                 <span>🛒</span>
                 <span className="bg-saikou-secondary text-white rounded-full w-6 h-6 flex items-center justify-center text-sm">
                   {cartCount}
                 </span>
-              </button>
+              </Link>
             </div>
           </div>
         </nav>
       </header>
 
-      {/* Hero Section */}
-      <section className="pt-24 pb-16 bg-gradient-to-br from-saikou-background to-white">
+      {/* Hero Slideshow Section */}
+      <section className="pt-24 pb-8 bg-gradient-to-br from-saikou-background to-white">
         <div className="container mx-auto px-4">
+          <Carousel className="w-full max-w-6xl mx-auto mb-16">
+            <CarouselContent>
+              {featuredProducts.map((product, index) => (
+                <CarouselItem key={index}>
+                  <div className="grid md:grid-cols-2 gap-8 items-center min-h-[500px] bg-white rounded-2xl shadow-xl p-8">
+                    <div className="space-y-6">
+                      <div className="space-y-4">
+                        <span className="inline-block bg-saikou-accent text-white px-4 py-2 rounded-full text-sm font-darker-grotesque font-semibold">
+                          {product.badge}
+                        </span>
+                        <h2 className="text-4xl md:text-5xl font-space-grotesk font-bold text-saikou-secondary leading-tight">
+                          {product.name}
+                        </h2>
+                        <p className="text-xl text-gray-600 font-darker-grotesque">
+                          Premium collectible figure from our {product.collection}
+                        </p>
+                        <p className="text-3xl font-space-grotesk font-bold text-saikou-accent">
+                          {product.price}
+                        </p>
+                      </div>
+                      <div className="flex flex-col sm:flex-row gap-4">
+                        <Link 
+                          to={`/product/${product.id}`}
+                          className="bg-saikou-primary text-saikou-secondary px-8 py-3 rounded-lg font-darker-grotesque font-semibold hover:bg-saikou-accent hover:text-white transition-all text-center"
+                        >
+                          View Details
+                        </Link>
+                        <button 
+                          onClick={() => addToCart(product.id, product.name, product.price)}
+                          className="border-2 border-saikou-primary text-saikou-secondary px-8 py-3 rounded-lg font-darker-grotesque font-semibold hover:bg-saikou-primary transition-all"
+                        >
+                          Add to Cart
+                        </button>
+                      </div>
+                    </div>
+                    <div className="relative">
+                      <img 
+                        src={product.image} 
+                        alt={product.name}
+                        className="w-full h-auto max-h-[400px] object-contain rounded-lg"
+                      />
+                    </div>
+                  </div>
+                </CarouselItem>
+              ))}
+            </CarouselContent>
+            <CarouselPrevious className="left-4" />
+            <CarouselNext className="right-4" />
+          </Carousel>
+          
           <div className="text-center max-w-4xl mx-auto mb-16">
             <h1 className="text-5xl md:text-6xl font-space-grotesk font-bold mb-6 bg-gradient-to-r from-saikou-secondary to-saikou-accent bg-clip-text text-transparent">
               Sculpted with Love. And Way Too Much Time.
@@ -80,15 +165,15 @@ const Index = () => {
           </div>
           
           <div className="grid md:grid-cols-3 gap-8">
-            <div className="bg-white p-8 rounded-lg shadow-lg text-center">
+            <div className="bg-white p-8 rounded-lg shadow-lg text-center hover:shadow-xl transition-shadow">
               <h3 className="text-xl font-space-grotesk font-semibold mb-4 text-saikou-secondary">Made Here. Not Meh.</h3>
               <p className="font-darker-grotesque text-gray-600">Proudly made in India with global-quality standards</p>
             </div>
-            <div className="bg-white p-8 rounded-lg shadow-lg text-center">
+            <div className="bg-white p-8 rounded-lg shadow-lg text-center hover:shadow-xl transition-shadow">
               <h3 className="text-xl font-space-grotesk font-semibold mb-4 text-saikou-secondary">Details So Good, It's Rude.</h3>
               <p className="font-darker-grotesque text-gray-600">From facial expressions to fabric folds, we obsess over every pixel</p>
             </div>
-            <div className="bg-white p-8 rounded-lg shadow-lg text-center">
+            <div className="bg-white p-8 rounded-lg shadow-lg text-center hover:shadow-xl transition-shadow">
               <h3 className="text-xl font-space-grotesk font-semibold mb-4 text-saikou-secondary">For Collectors, Not Kids.</h3>
               <p className="font-darker-grotesque text-gray-600">Display-worthy, conversation-starting collectibles</p>
             </div>
@@ -101,7 +186,7 @@ const Index = () => {
         <div className="container mx-auto px-4">
           <h2 className="text-4xl font-space-grotesk font-bold text-center mb-12 text-saikou-secondary">Our Collections</h2>
           <div className="grid md:grid-cols-2 gap-8">
-            <div className="bg-saikou-background p-8 rounded-lg shadow-lg">
+            <div className="bg-saikou-background p-8 rounded-lg shadow-lg hover:shadow-xl transition-shadow">
               <h3 className="text-2xl font-space-grotesk font-semibold mb-4 text-saikou-secondary">Saikou</h3>
               <p className="font-darker-grotesque text-gray-600 mb-6 leading-relaxed">
                 Our flagship collection of full-sized, high-quality action figures—designed for fans who want more than just a toy. From anime action figures and superhero statues to gaming collectibles and legendary characters.
@@ -112,7 +197,7 @@ const Index = () => {
                 <span className="bg-saikou-primary text-saikou-secondary px-3 py-1 rounded-full text-sm font-darker-grotesque font-medium">Premium Finishes</span>
               </div>
             </div>
-            <div className="bg-saikou-background p-8 rounded-lg shadow-lg">
+            <div className="bg-saikou-background p-8 rounded-lg shadow-lg hover:shadow-xl transition-shadow">
               <h3 className="text-2xl font-space-grotesk font-semibold mb-4 text-saikou-secondary">Ikon</h3>
               <p className="font-darker-grotesque text-gray-600 mb-6 leading-relaxed">
                 Our exclusive collection of premium bust-style collectible figures—designed to deliver high-impact character presence in a compact, display-friendly format. Perfect for collectors, desk displays, or gifting.
@@ -131,62 +216,40 @@ const Index = () => {
       <section id="featured-products" className="py-16 bg-saikou-background">
         <div className="container mx-auto px-4">
           <h2 className="text-4xl font-space-grotesk font-bold text-center mb-12 text-saikou-secondary">Featured Products</h2>
-          <div className="grid md:grid-cols-2 gap-8">
-            {/* Product 1 */}
-            <div className="bg-white rounded-lg shadow-lg overflow-hidden">
-              <div className="relative h-80">
-                <img 
-                  src="/lovable-uploads/0c7e4678-ab10-4c01-960c-04634cda2647.png" 
-                  alt="Superman Figurine - Man of Steel" 
-                  className="w-full h-full object-cover"
-                />
-                <div className="absolute top-4 right-4 bg-saikou-accent text-white px-3 py-1 rounded-full text-sm font-darker-grotesque font-semibold">
-                  Premium
+          <div className="grid md:grid-cols-3 gap-8">
+            {featuredProducts.map((product) => (
+              <div key={product.id} className="bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition-shadow">
+                <div className="relative h-80">
+                  <img 
+                    src={product.image} 
+                    alt={product.name} 
+                    className="w-full h-full object-contain p-4"
+                  />
+                  <div className="absolute top-4 right-4 bg-saikou-accent text-white px-3 py-1 rounded-full text-sm font-darker-grotesque font-semibold">
+                    {product.badge}
+                  </div>
+                </div>
+                <div className="p-6">
+                  <h3 className="text-xl font-space-grotesk font-semibold mb-2 text-saikou-secondary">{product.name}</h3>
+                  <p className="text-sm font-darker-grotesque text-gray-500 mb-2">{product.collection}</p>
+                  <p className="text-2xl font-space-grotesk font-bold text-saikou-accent mb-4">{product.price}</p>
+                  <div className="flex gap-2">
+                    <Link 
+                      to={`/product/${product.id}`}
+                      className="flex-1 bg-saikou-background text-saikou-secondary py-3 rounded-lg font-darker-grotesque font-semibold hover:bg-saikou-primary transition-all text-center"
+                    >
+                      View Details
+                    </Link>
+                    <button 
+                      onClick={() => addToCart(product.id, product.name, product.price)}
+                      className="flex-1 bg-saikou-primary text-saikou-secondary py-3 rounded-lg font-darker-grotesque font-semibold hover:bg-saikou-accent hover:text-white transition-all"
+                    >
+                      Add to Cart
+                    </button>
+                  </div>
                 </div>
               </div>
-              <div className="p-6">
-                <h3 className="text-xl font-space-grotesk font-semibold mb-2 text-saikou-secondary">Superman Figurine – Man of Steel</h3>
-                <p className="text-sm font-darker-grotesque text-gray-500 mb-2">Premium Action Figure by Saikou</p>
-                <p className="text-2xl font-space-grotesk font-bold text-saikou-accent mb-4">₹4,999</p>
-                <p className="font-darker-grotesque text-gray-600 mb-6 leading-relaxed">
-                  Strike a pose with the Last Son of Krypton! This Man of Steel action figure by Saikou is a full-sized, high-detail collectible built for bold shelves and true fans.
-                </p>
-                <button 
-                  onClick={() => addToCart('1', 'Superman Figurine – Man of Steel', '₹4,999')}
-                  className="w-full bg-saikou-primary text-saikou-secondary py-3 rounded-lg font-darker-grotesque font-semibold hover:bg-saikou-accent hover:text-white transition-all"
-                >
-                  Add to Cart
-                </button>
-              </div>
-            </div>
-
-            {/* Product 2 */}
-            <div className="bg-white rounded-lg shadow-lg overflow-hidden">
-              <div className="relative h-80">
-                <img 
-                  src="/lovable-uploads/0c8687cf-bb02-4e2f-b535-81fda09f22d7.png" 
-                  alt="Sung Jin-Woo Figurine - Shadow Monarch Edition" 
-                  className="w-full h-full object-cover"
-                />
-                <div className="absolute top-4 right-4 bg-red-500 text-white px-3 py-1 rounded-full text-sm font-darker-grotesque font-semibold">
-                  Limited
-                </div>
-              </div>
-              <div className="p-6">
-                <h3 className="text-xl font-space-grotesk font-semibold mb-2 text-saikou-secondary">Sung Jin-Woo Shadow Monarch Edition</h3>
-                <p className="text-sm font-darker-grotesque text-gray-500 mb-2">Premium Anime Action Figure by Saikou</p>
-                <p className="text-2xl font-space-grotesk font-bold text-saikou-accent mb-4">₹5,499</p>
-                <p className="font-darker-grotesque text-gray-600 mb-6 leading-relaxed">
-                  From Solo Leveling to shelf domination—this full-sized Sung Jin-Woo action figure captures the Shadow Monarch in mid-attack, dark aura and all.
-                </p>
-                <button 
-                  onClick={() => addToCart('2', 'Sung Jin-Woo Shadow Monarch Edition', '₹5,499')}
-                  className="w-full bg-saikou-primary text-saikou-secondary py-3 rounded-lg font-darker-grotesque font-semibold hover:bg-saikou-accent hover:text-white transition-all"
-                >
-                  Add to Cart
-                </button>
-              </div>
-            </div>
+            ))}
           </div>
         </div>
       </section>
