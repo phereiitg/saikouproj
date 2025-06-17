@@ -28,13 +28,13 @@ const MyAccount = () => {
         <nav className="container mx-auto px-4 py-4">
           <div className="flex justify-between items-center">
             <Link to="/" className="flex items-center gap-3">
-              <img 
-                src="/lovable-uploads/3e213b54-d1c4-457a-8f53-e7fa0d65b186.png" 
-                alt="Saikou Logo" 
-                className="h-12 w-auto"
-              />
-              <div className="flex flex-col">
-                <span className="text-xs text-gray-500 font-darker-grotesque font-medium">Made in India</span>
+              <div className="flex flex-col items-center">
+                <img 
+                  src="/lovable-uploads/3e213b54-d1c4-457a-8f53-e7fa0d65b186.png" 
+                  alt="Saikou Logo" 
+                  className="h-16 w-auto"
+                />
+                <span className="text-xs text-gray-500 font-darker-grotesque font-medium -mt-1">Made in India</span>
               </div>
             </Link>
             <div className="hidden md:flex items-center gap-8">
