@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import {
@@ -59,27 +60,37 @@ const Index = () => {
   return (
     <div className="min-h-screen">
       {/* Header Section */}
-      <header className="fixed top-0 left-0 right-0 bg-white shadow-lg z-50">
+      <header className="fixed top-0 left-0 right-0 bg-white/95 backdrop-blur-lg border-b border-gray-100 shadow-sm z-50">
         <nav className="container mx-auto px-4 py-4">
           <div className="flex justify-between items-center">
-            <Link to="/" className="flex flex-col">
-              <h1 className="text-2xl font-space-grotesk font-bold text-saikou-secondary">Saikou</h1>
-              <span className="text-xs text-gray-600 font-darker-grotesque font-medium -mt-1">Made in India</span>
+            <Link to="/" className="flex items-center gap-3">
+              <img 
+                src="/lovable-uploads/3e213b54-d1c4-457a-8f53-e7fa0d65b186.png" 
+                alt="Saikou Logo" 
+                className="h-8 w-auto"
+              />
+              <div className="flex flex-col">
+                <span className="text-xs text-gray-500 font-darker-grotesque font-medium">Made in India</span>
+              </div>
             </Link>
             <div className="hidden md:flex items-center gap-8">
-              <Link to="/products" className="text-saikou-secondary font-darker-grotesque font-medium hover:text-saikou-accent transition-colors">
+              <Link to="/products" className="text-saikou-secondary font-darker-grotesque font-medium hover:text-saikou-accent transition-colors relative group">
                 Products
+                <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-saikou-accent transition-all group-hover:w-full"></span>
               </Link>
-              <button onClick={() => scrollToSection('collections')} className="text-saikou-secondary font-darker-grotesque font-medium hover:text-saikou-accent transition-colors">
+              <button onClick={() => scrollToSection('collections')} className="text-saikou-secondary font-darker-grotesque font-medium hover:text-saikou-accent transition-colors relative group">
                 Collections
+                <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-saikou-accent transition-all group-hover:w-full"></span>
               </button>
-              <button onClick={() => scrollToSection('about')} className="text-saikou-secondary font-darker-grotesque font-medium hover:text-saikou-accent transition-colors">
+              <button onClick={() => scrollToSection('about')} className="text-saikou-secondary font-darker-grotesque font-medium hover:text-saikou-accent transition-colors relative group">
                 About
+                <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-saikou-accent transition-all group-hover:w-full"></span>
               </button>
-              <button onClick={() => scrollToSection('contact')} className="text-saikou-secondary font-darker-grotesque font-medium hover:text-saikou-accent transition-colors">
+              <button onClick={() => scrollToSection('contact')} className="text-saikou-secondary font-darker-grotesque font-medium hover:text-saikou-accent transition-colors relative group">
                 Contact
+                <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-saikou-accent transition-all group-hover:w-full"></span>
               </button>
-              <Link to="/cart" className="bg-saikou-primary text-saikou-secondary px-4 py-2 rounded-lg flex items-center gap-2 font-darker-grotesque font-semibold hover:bg-saikou-accent hover:text-white transition-all">
+              <Link to="/cart" className="bg-gradient-to-r from-saikou-primary to-saikou-accent text-saikou-secondary px-6 py-2.5 rounded-full flex items-center gap-2 font-darker-grotesque font-semibold hover:shadow-lg hover:scale-105 transition-all duration-300">
                 <span>🛒</span>
                 <span className="bg-saikou-secondary text-white rounded-full w-6 h-6 flex items-center justify-center text-sm">
                   {cartCount}
@@ -91,16 +102,16 @@ const Index = () => {
       </header>
 
       {/* Hero Slideshow Section */}
-      <section className="pt-24 pb-8 bg-gradient-to-br from-saikou-background to-white">
+      <section className="pt-24 pb-8 bg-gradient-to-br from-saikou-background via-white to-saikou-background">
         <div className="container mx-auto px-4">
           <Carousel className="w-full max-w-6xl mx-auto mb-16">
             <CarouselContent>
               {featuredProducts.map((product, index) => (
                 <CarouselItem key={index}>
-                  <div className="grid md:grid-cols-2 gap-8 items-center min-h-[500px] bg-white rounded-2xl shadow-xl p-8">
+                  <div className="grid md:grid-cols-2 gap-8 items-center min-h-[500px] bg-white/80 backdrop-blur-sm rounded-3xl shadow-2xl p-8 border border-gray-100">
                     <div className="space-y-6">
                       <div className="space-y-4">
-                        <span className="inline-block bg-saikou-accent text-white px-4 py-2 rounded-full text-sm font-darker-grotesque font-semibold">
+                        <span className="inline-block bg-gradient-to-r from-saikou-accent to-saikou-primary text-white px-4 py-2 rounded-full text-sm font-darker-grotesque font-semibold shadow-lg">
                           {product.badge}
                         </span>
                         <h2 className="text-4xl md:text-5xl font-space-grotesk font-bold text-saikou-secondary leading-tight">
@@ -116,13 +127,13 @@ const Index = () => {
                       <div className="flex flex-col sm:flex-row gap-4">
                         <Link 
                           to={`/product/${product.id}`}
-                          className="bg-saikou-primary text-saikou-secondary px-8 py-3 rounded-lg font-darker-grotesque font-semibold hover:bg-saikou-accent hover:text-white transition-all text-center"
+                          className="bg-gradient-to-r from-saikou-primary to-saikou-accent text-saikou-secondary px-8 py-3 rounded-lg font-darker-grotesque font-semibold hover:shadow-lg hover:scale-105 transition-all duration-300 text-center"
                         >
                           View Details
                         </Link>
                         <button 
                           onClick={() => addToCart(product.id, product.name, product.price)}
-                          className="border-2 border-saikou-primary text-saikou-secondary px-8 py-3 rounded-lg font-darker-grotesque font-semibold hover:bg-saikou-primary transition-all"
+                          className="border-2 border-saikou-primary text-saikou-secondary px-8 py-3 rounded-lg font-darker-grotesque font-semibold hover:bg-saikou-primary hover:shadow-lg hover:scale-105 transition-all duration-300"
                         >
                           Add to Cart
                         </button>
@@ -153,13 +164,13 @@ const Index = () => {
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <button 
                 onClick={() => scrollToSection('collections')}
-                className="bg-saikou-primary text-saikou-secondary px-8 py-3 rounded-lg font-darker-grotesque font-semibold hover:bg-saikou-accent hover:text-white transition-all"
+                className="bg-gradient-to-r from-saikou-primary to-saikou-accent text-saikou-secondary px-8 py-3 rounded-lg font-darker-grotesque font-semibold hover:shadow-lg hover:scale-105 transition-all duration-300"
               >
                 Explore Collections
               </button>
               <Link 
                 to="/products"
-                className="border-2 border-saikou-primary text-saikou-secondary px-8 py-3 rounded-lg font-darker-grotesque font-semibold hover:bg-saikou-primary transition-all text-center"
+                className="border-2 border-saikou-primary text-saikou-secondary px-8 py-3 rounded-lg font-darker-grotesque font-semibold hover:bg-saikou-primary hover:shadow-lg hover:scale-105 transition-all duration-300 text-center"
               >
                 View All Products
               </Link>
@@ -167,15 +178,15 @@ const Index = () => {
           </div>
           
           <div className="grid md:grid-cols-3 gap-8">
-            <div className="bg-white p-8 rounded-lg shadow-lg text-center hover:shadow-xl transition-shadow">
+            <div className="bg-white/80 backdrop-blur-sm p-8 rounded-xl shadow-lg text-center hover:shadow-xl hover:scale-105 transition-all duration-300 border border-gray-100">
               <h3 className="text-xl font-space-grotesk font-semibold mb-4 text-saikou-secondary">Made Here. Not Meh.</h3>
               <p className="font-darker-grotesque text-gray-600">Proudly made in India with global-quality standards</p>
             </div>
-            <div className="bg-white p-8 rounded-lg shadow-lg text-center hover:shadow-xl transition-shadow">
+            <div className="bg-white/80 backdrop-blur-sm p-8 rounded-xl shadow-lg text-center hover:shadow-xl hover:scale-105 transition-all duration-300 border border-gray-100">
               <h3 className="text-xl font-space-grotesk font-semibold mb-4 text-saikou-secondary">Details So Good, It's Rude.</h3>
               <p className="font-darker-grotesque text-gray-600">From facial expressions to fabric folds, we obsess over every pixel</p>
             </div>
-            <div className="bg-white p-8 rounded-lg shadow-lg text-center hover:shadow-xl transition-shadow">
+            <div className="bg-white/80 backdrop-blur-sm p-8 rounded-xl shadow-lg text-center hover:shadow-xl hover:scale-105 transition-all duration-300 border border-gray-100">
               <h3 className="text-xl font-space-grotesk font-semibold mb-4 text-saikou-secondary">For Collectors, Not Kids.</h3>
               <p className="font-darker-grotesque text-gray-600">Display-worthy, conversation-starting collectibles</p>
             </div>
@@ -188,26 +199,38 @@ const Index = () => {
         <div className="container mx-auto px-4">
           <h2 className="text-4xl font-space-grotesk font-bold text-center mb-12 text-saikou-secondary">Our Collections</h2>
           <div className="grid md:grid-cols-2 gap-8">
-            <div className="bg-saikou-background p-8 rounded-lg shadow-lg hover:shadow-xl transition-shadow">
-              <h3 className="text-2xl font-space-grotesk font-semibold mb-4 text-saikou-secondary">Saikou</h3>
+            <div className="bg-gradient-to-br from-saikou-background to-white p-8 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 border border-gray-100">
+              <div className="flex items-center gap-4 mb-6">
+                <img 
+                  src="/lovable-uploads/3e213b54-d1c4-457a-8f53-e7fa0d65b186.png" 
+                  alt="Saikou Logo" 
+                  className="h-12 w-auto"
+                />
+              </div>
               <p className="font-darker-grotesque text-gray-600 mb-6 leading-relaxed">
                 Our flagship collection of full-sized, high-quality action figures—designed for fans who want more than just a toy. From anime action figures and superhero statues to gaming collectibles and legendary characters.
               </p>
               <div className="flex flex-wrap gap-2">
-                <span className="bg-saikou-primary text-saikou-secondary px-3 py-1 rounded-full text-sm font-darker-grotesque font-medium">Full-Size Glory</span>
-                <span className="bg-saikou-primary text-saikou-secondary px-3 py-1 rounded-full text-sm font-darker-grotesque font-medium">Dynamic Poses</span>
-                <span className="bg-saikou-primary text-saikou-secondary px-3 py-1 rounded-full text-sm font-darker-grotesque font-medium">Premium Finishes</span>
+                <span className="bg-gradient-to-r from-saikou-primary to-saikou-accent text-saikou-secondary px-3 py-1 rounded-full text-sm font-darker-grotesque font-medium">Full-Size Glory</span>
+                <span className="bg-gradient-to-r from-saikou-primary to-saikou-accent text-saikou-secondary px-3 py-1 rounded-full text-sm font-darker-grotesque font-medium">Dynamic Poses</span>
+                <span className="bg-gradient-to-r from-saikou-primary to-saikou-accent text-saikou-secondary px-3 py-1 rounded-full text-sm font-darker-grotesque font-medium">Premium Finishes</span>
               </div>
             </div>
-            <div className="bg-saikou-background p-8 rounded-lg shadow-lg hover:shadow-xl transition-shadow">
-              <h3 className="text-2xl font-space-grotesk font-semibold mb-4 text-saikou-secondary">Ikon</h3>
+            <div className="bg-gradient-to-br from-saikou-background to-white p-8 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 border border-gray-100">
+              <div className="flex items-center gap-4 mb-6">
+                <img 
+                  src="/lovable-uploads/adb51653-88fb-466e-847a-c336186d8603.png" 
+                  alt="Ikon Logo" 
+                  className="h-12 w-auto"
+                />
+              </div>
               <p className="font-darker-grotesque text-gray-600 mb-6 leading-relaxed">
                 Our exclusive collection of premium bust-style collectible figures—designed to deliver high-impact character presence in a compact, display-friendly format. Perfect for collectors, desk displays, or gifting.
               </p>
               <div className="flex flex-wrap gap-2">
-                <span className="bg-saikou-primary text-saikou-secondary px-3 py-1 rounded-full text-sm font-darker-grotesque font-medium">Bust-Style</span>
-                <span className="bg-saikou-primary text-saikou-secondary px-3 py-1 rounded-full text-sm font-darker-grotesque font-medium">Compact Display</span>
-                <span className="bg-saikou-primary text-saikou-secondary px-3 py-1 rounded-full text-sm font-darker-grotesque font-medium">Bold Style</span>
+                <span className="bg-gradient-to-r from-saikou-primary to-saikou-accent text-saikou-secondary px-3 py-1 rounded-full text-sm font-darker-grotesque font-medium">Bust-Style</span>
+                <span className="bg-gradient-to-r from-saikou-primary to-saikou-accent text-saikou-secondary px-3 py-1 rounded-full text-sm font-darker-grotesque font-medium">Compact Display</span>
+                <span className="bg-gradient-to-r from-saikou-primary to-saikou-accent text-saikou-secondary px-3 py-1 rounded-full text-sm font-darker-grotesque font-medium">Bold Style</span>
               </div>
             </div>
           </div>
@@ -215,27 +238,27 @@ const Index = () => {
       </section>
 
       {/* Featured Products Section - Now shows only 3 products */}
-      <section id="featured-products" className="py-16 bg-saikou-background">
+      <section id="featured-products" className="py-16 bg-gradient-to-br from-saikou-background via-white to-saikou-background">
         <div className="container mx-auto px-4">
           <div className="flex justify-between items-center mb-12">
             <h2 className="text-4xl font-space-grotesk font-bold text-saikou-secondary">Featured Products</h2>
             <Link 
               to="/products"
-              className="bg-saikou-primary text-saikou-secondary px-6 py-3 rounded-lg font-darker-grotesque font-semibold hover:bg-saikou-accent hover:text-white transition-all"
+              className="bg-gradient-to-r from-saikou-primary to-saikou-accent text-saikou-secondary px-6 py-3 rounded-lg font-darker-grotesque font-semibold hover:shadow-lg hover:scale-105 transition-all duration-300"
             >
               View All Products
             </Link>
           </div>
           <div className="grid md:grid-cols-3 gap-8">
             {featuredProducts.map((product) => (
-              <div key={product.id} className="bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition-shadow">
+              <div key={product.id} className="bg-white/80 backdrop-blur-sm rounded-xl shadow-lg overflow-hidden hover:shadow-xl hover:scale-105 transition-all duration-300 border border-gray-100">
                 <div className="relative h-80">
                   <img 
                     src={product.image} 
                     alt={product.name} 
                     className="w-full h-full object-contain p-4"
                   />
-                  <div className="absolute top-4 right-4 bg-saikou-accent text-white px-3 py-1 rounded-full text-sm font-darker-grotesque font-semibold">
+                  <div className="absolute top-4 right-4 bg-gradient-to-r from-saikou-accent to-saikou-primary text-white px-3 py-1 rounded-full text-sm font-darker-grotesque font-semibold shadow-lg">
                     {product.badge}
                   </div>
                 </div>
@@ -246,13 +269,13 @@ const Index = () => {
                   <div className="flex gap-2">
                     <Link 
                       to={`/product/${product.id}`}
-                      className="flex-1 bg-saikou-background text-saikou-secondary py-3 rounded-lg font-darker-grotesque font-semibold hover:bg-saikou-primary transition-all text-center"
+                      className="flex-1 bg-saikou-background text-saikou-secondary py-3 rounded-lg font-darker-grotesque font-semibold hover:bg-saikou-primary hover:scale-105 transition-all duration-300 text-center"
                     >
                       View Details
                     </Link>
                     <button 
                       onClick={() => addToCart(product.id, product.name, product.price)}
-                      className="flex-1 bg-saikou-primary text-saikou-secondary py-3 rounded-lg font-darker-grotesque font-semibold hover:bg-saikou-accent hover:text-white transition-all"
+                      className="flex-1 bg-gradient-to-r from-saikou-primary to-saikou-accent text-saikou-secondary py-3 rounded-lg font-darker-grotesque font-semibold hover:shadow-lg hover:scale-105 transition-all duration-300"
                     >
                       Add to Cart
                     </button>
@@ -265,26 +288,58 @@ const Index = () => {
       </section>
 
       {/* About Section */}
-      <section id="about" className="py-16 bg-white">
-        <div className="container mx-auto px-4">
-          <div className="max-w-4xl mx-auto">
-            <h2 className="text-4xl font-space-grotesk font-bold text-center mb-12 text-saikou-secondary">Who We Are</h2>
-            <div className="space-y-6 font-darker-grotesque text-gray-600 leading-relaxed">
-              <p className="text-lg font-medium text-saikou-secondary">
-                At Saikou, we're not just making action figures—we're bringing your favorite characters to life, one sculpt at a time.
-              </p>
-              <p>
-                Born out of pure fandom and frustration (ever paid way too much for a flimsy imported figure?) Saikou was created to give Indian fans the quality they deserve—without the wait, the customs drama, or the disappointing paint jobs.
-              </p>
-              <p>
-                From anime action figures and superhero collectibles to gaming icons and mythical legends, everything we make is built with care, crafted in India, and designed to look damn good on your shelf. Whether you're a serious collector or just searching for the perfect gift, we make characters that feel personal—and figures that feel premium.
-              </p>
-              <p className="italic">
-                We sweat the small stuff. We obsess over details. And yes, we take way too long perfecting things. But that's what happens when you're fans first, makers second.
-              </p>
-              <div className="bg-saikou-primary p-6 rounded-lg text-center">
-                <p className="font-space-grotesk font-semibold text-saikou-secondary">
-                  Welcome to Saikou. Collectibles that actually live up to the hype.
+      <section id="about" className="py-20 bg-white relative overflow-hidden">
+        <div className="absolute inset-0 bg-gradient-to-br from-saikou-background/30 to-transparent"></div>
+        <div className="container mx-auto px-4 relative z-10">
+          <div className="max-w-6xl mx-auto">
+            <div className="text-center mb-16">
+              <h2 className="text-5xl md:text-6xl font-space-grotesk font-bold mb-6 bg-gradient-to-r from-saikou-secondary to-saikou-accent bg-clip-text text-transparent">
+                Who We Are
+              </h2>
+              <div className="w-24 h-1 bg-gradient-to-r from-saikou-primary to-saikou-accent mx-auto rounded-full"></div>
+            </div>
+            
+            <div className="grid lg:grid-cols-2 gap-12 items-center mb-16">
+              <div className="space-y-8">
+                <div className="bg-white/80 backdrop-blur-sm p-8 rounded-xl shadow-lg border border-gray-100 hover:shadow-xl transition-all duration-300">
+                  <h3 className="text-2xl font-space-grotesk font-bold text-saikou-secondary mb-4">Our Mission</h3>
+                  <p className="font-darker-grotesque text-gray-600 leading-relaxed text-lg">
+                    At Saikou, we're not just making action figures—we're bringing your favorite characters to life, one sculpt at a time. We believe every fan deserves premium quality without compromise.
+                  </p>
+                </div>
+                
+                <div className="bg-gradient-to-br from-saikou-primary/20 to-saikou-accent/20 p-8 rounded-xl shadow-lg border border-gray-100 hover:shadow-xl transition-all duration-300">
+                  <h3 className="text-2xl font-space-grotesk font-bold text-saikou-secondary mb-4">Our Story</h3>
+                  <p className="font-darker-grotesque text-gray-600 leading-relaxed text-lg">
+                    Born out of pure fandom and frustration with overpriced imports, Saikou was created to give Indian fans the quality they deserve—without the wait, customs drama, or disappointing paint jobs.
+                  </p>
+                </div>
+              </div>
+              
+              <div className="space-y-8">
+                <div className="bg-gradient-to-br from-saikou-accent/20 to-saikou-primary/20 p-8 rounded-xl shadow-lg border border-gray-100 hover:shadow-xl transition-all duration-300">
+                  <h3 className="text-2xl font-space-grotesk font-bold text-saikou-secondary mb-4">Our Craft</h3>
+                  <p className="font-darker-grotesque text-gray-600 leading-relaxed text-lg">
+                    From anime action figures and superhero collectibles to gaming icons and mythical legends, everything we make is built with care, crafted in India, and designed to look incredible on your shelf.
+                  </p>
+                </div>
+                
+                <div className="bg-white/80 backdrop-blur-sm p-8 rounded-xl shadow-lg border border-gray-100 hover:shadow-xl transition-all duration-300">
+                  <h3 className="text-2xl font-space-grotesk font-bold text-saikou-secondary mb-4">Our Promise</h3>
+                  <p className="font-darker-grotesque text-gray-600 leading-relaxed text-lg">
+                    We sweat the small stuff. We obsess over details. Yes, we take way too long perfecting things. But that's what happens when you're fans first, makers second.
+                  </p>
+                </div>
+              </div>
+            </div>
+            
+            <div className="text-center">
+              <div className="bg-gradient-to-r from-saikou-primary to-saikou-accent p-8 rounded-2xl shadow-xl">
+                <p className="text-2xl font-space-grotesk font-bold text-saikou-secondary mb-4">
+                  Welcome to Saikou
+                </p>
+                <p className="text-xl font-darker-grotesque text-saikou-secondary">
+                  Collectibles that actually live up to the hype.
                 </p>
               </div>
             </div>
@@ -293,8 +348,9 @@ const Index = () => {
       </section>
 
       {/* Newsletter Section */}
-      <section className="py-16 bg-saikou-secondary text-white">
-        <div className="container mx-auto px-4">
+      <section className="py-16 bg-gradient-to-br from-saikou-secondary to-gray-800 text-white relative overflow-hidden">
+        <div className="absolute inset-0 bg-gradient-to-r from-saikou-accent/10 to-saikou-primary/10"></div>
+        <div className="container mx-auto px-4 relative z-10">
           <div className="max-w-2xl mx-auto text-center">
             <h2 className="text-3xl font-space-grotesk font-bold mb-4">Help Us Make Cooler Stuff</h2>
             <p className="font-darker-grotesque text-lg mb-8 opacity-90">
@@ -305,11 +361,11 @@ const Index = () => {
                 type="email" 
                 placeholder="Your email address" 
                 required
-                className="flex-1 px-4 py-3 rounded-lg text-saikou-secondary font-darker-grotesque"
+                className="flex-1 px-4 py-3 rounded-lg text-saikou-secondary font-darker-grotesque border-2 border-transparent focus:border-saikou-primary transition-all duration-300"
               />
               <button 
                 type="submit"
-                className="bg-saikou-primary text-saikou-secondary px-6 py-3 rounded-lg font-darker-grotesque font-semibold hover:bg-saikou-accent hover:text-white transition-all"
+                className="bg-gradient-to-r from-saikou-primary to-saikou-accent text-saikou-secondary px-6 py-3 rounded-lg font-darker-grotesque font-semibold hover:shadow-lg hover:scale-105 transition-all duration-300"
               >
                 Notify Me
               </button>
@@ -319,30 +375,30 @@ const Index = () => {
       </section>
 
       {/* Contact Section */}
-      <section id="contact" className="py-16 bg-saikou-background">
+      <section id="contact" className="py-16 bg-gradient-to-br from-saikou-background to-white">
         <div className="container mx-auto px-4">
-          <h2 className="text-4xl font-space-grotesk font-bold text-center mb-12 text-saikou-secondary">Contact Us</h2>
+          <h2 className="text-4xl font-space-grotesk font-bold text-center text-saikou-secondary mb-12">Contact Us</h2>
           <div className="max-w-3xl mx-auto">
             <div className="grid md:grid-cols-2 gap-8">
               <div className="space-y-6">
-                <div>
+                <div className="bg-white/80 backdrop-blur-sm p-6 rounded-xl shadow-lg border border-gray-100">
                   <h3 className="font-space-grotesk font-semibold text-saikou-secondary mb-2">Company</h3>
                   <p className="font-darker-grotesque text-gray-600">Saikou</p>
                 </div>
-                <div>
+                <div className="bg-white/80 backdrop-blur-sm p-6 rounded-xl shadow-lg border border-gray-100">
                   <h3 className="font-space-grotesk font-semibold text-saikou-secondary mb-2">Phone</h3>
                   <p className="font-darker-grotesque text-gray-600">92742 38391</p>
                 </div>
               </div>
               <div className="space-y-6">
-                <div>
+                <div className="bg-white/80 backdrop-blur-sm p-6 rounded-xl shadow-lg border border-gray-100">
                   <h3 className="font-space-grotesk font-semibold text-saikou-secondary mb-2">Email</h3>
                   <p className="font-darker-grotesque text-gray-600">
                     <a href="mailto:info@saikoushop.com" className="hover:text-saikou-accent transition-colors">info@saikoushop.com</a><br/>
                     <a href="mailto:care@saikoushop.com" className="hover:text-saikou-accent transition-colors">care@saikoushop.com</a> (Customer care)
                   </p>
                 </div>
-                <div>
+                <div className="bg-white/80 backdrop-blur-sm p-6 rounded-xl shadow-lg border border-gray-100">
                   <h3 className="font-space-grotesk font-semibold text-saikou-secondary mb-2">Location</h3>
                   <p className="font-darker-grotesque text-gray-600">India</p>
                 </div>
@@ -353,19 +409,25 @@ const Index = () => {
       </section>
 
       {/* Footer */}
-      <footer className="py-12 bg-saikou-secondary text-white">
+      <footer className="py-12 bg-gradient-to-br from-saikou-secondary to-gray-800 text-white">
         <div className="container mx-auto px-4">
           <div className="flex flex-col md:flex-row justify-between items-center mb-8">
-            <div className="mb-6 md:mb-0">
-              <h3 className="text-xl font-space-grotesk font-bold">Saikou</h3>
-              <p className="font-darker-grotesque opacity-80">Premium collectibles. Made in India.</p>
+            <div className="mb-6 md:mb-0 flex items-center gap-3">
+              <img 
+                src="/lovable-uploads/3e213b54-d1c4-457a-8f53-e7fa0d65b186.png" 
+                alt="Saikou Logo" 
+                className="h-8 w-auto filter brightness-0 invert"
+              />
+              <div>
+                <p className="font-darker-grotesque opacity-80">Premium collectibles. Made in India.</p>
+              </div>
             </div>
             <div className="flex flex-wrap gap-6 justify-center">
-              <Link to="/products" className="font-darker-grotesque opacity-80 hover:opacity-100 transition-opacity">Products</Link>
-              <button onClick={() => scrollToSection('collections')} className="font-darker-grotesque opacity-80 hover:opacity-100 transition-opacity">Collections</button>
-              <button onClick={() => scrollToSection('about')} className="font-darker-grotesque opacity-80 hover:opacity-100 transition-opacity">About</button>
-              <button onClick={() => scrollToSection('contact')} className="font-darker-grotesque opacity-80 hover:opacity-100 transition-opacity">Contact</button>
-              <a href="mailto:info@saikoushop.com" className="font-darker-grotesque opacity-80 hover:opacity-100 transition-opacity">Support</a>
+              <Link to="/products" className="font-darker-grotesque opacity-80 hover:opacity-100 hover:text-saikou-primary transition-all">Products</Link>
+              <button onClick={() => scrollToSection('collections')} className="font-darker-grotesque opacity-80 hover:opacity-100 hover:text-saikou-primary transition-all">Collections</button>
+              <button onClick={() => scrollToSection('about')} className="font-darker-grotesque opacity-80 hover:opacity-100 hover:text-saikou-primary transition-all">About</button>
+              <button onClick={() => scrollToSection('contact')} className="font-darker-grotesque opacity-80 hover:opacity-100 hover:text-saikou-primary transition-all">Contact</button>
+              <a href="mailto:info@saikoushop.com" className="font-darker-grotesque opacity-80 hover:opacity-100 hover:text-saikou-primary transition-all">Support</a>
             </div>
           </div>
           <div className="text-center pt-8 border-t border-gray-600">
@@ -376,7 +438,7 @@ const Index = () => {
 
       {/* Cart Notification */}
       {showCartNotification && (
-        <div className="fixed top-24 right-4 bg-saikou-primary text-saikou-secondary px-6 py-3 rounded-lg shadow-lg z-50 font-darker-grotesque font-semibold">
+        <div className="fixed top-24 right-4 bg-gradient-to-r from-saikou-primary to-saikou-accent text-saikou-secondary px-6 py-3 rounded-lg shadow-lg z-50 font-darker-grotesque font-semibold">
           Item added to cart!
         </div>
       )}
