@@ -63,14 +63,15 @@ const Index = () => {
       <header className="fixed top-0 left-0 right-0 bg-white/95 backdrop-blur-lg border-b border-gray-100 shadow-sm z-50">
         <nav className="container mx-auto px-4 py-4">
           <div className="flex justify-between items-center">
-            <Link to="/" className="flex items-center gap-3">
+            <Link to="/" className="flex items-center gap-4">
               <img 
                 src="/lovable-uploads/3e213b54-d1c4-457a-8f53-e7fa0d65b186.png" 
                 alt="Saikou Logo" 
-                className="h-8 w-auto"
+                className="h-12 w-auto"
               />
               <div className="flex flex-col">
-                <span className="text-xs text-gray-500 font-darker-grotesque font-medium">Made in India</span>
+                <span className="text-2xl font-space-grotesk font-bold text-saikou-secondary">Saikou</span>
+                <span className="text-xs text-gray-500 font-darker-grotesque font-medium -mt-1">Made in India</span>
               </div>
             </Link>
             <div className="hidden md:flex items-center gap-8">
@@ -90,6 +91,10 @@ const Index = () => {
                 Contact
                 <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-saikou-accent transition-all group-hover:w-full"></span>
               </button>
+              <Link to="/my-account" className="text-saikou-secondary font-darker-grotesque font-medium hover:text-saikou-accent transition-colors relative group">
+                My Account
+                <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-saikou-accent transition-all group-hover:w-full"></span>
+              </Link>
               <Link to="/cart" className="bg-gradient-to-r from-saikou-primary to-saikou-accent text-saikou-secondary px-6 py-2.5 rounded-full flex items-center gap-2 font-darker-grotesque font-semibold hover:shadow-lg hover:scale-105 transition-all duration-300">
                 <span>🛒</span>
                 <span className="bg-saikou-secondary text-white rounded-full w-6 h-6 flex items-center justify-center text-sm">
