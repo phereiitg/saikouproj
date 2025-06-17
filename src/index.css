@@ -103,7 +103,7 @@
   }
 }
 
-/* Custom animations */
+/* Custom animations - Only for "Why Choose Saikou" section */
 @keyframes fade-in {
   from {
     opacity: 0;
