@@ -25,10 +25,14 @@ export default {
 			},
 			colors: {
 				'saikou': {
-					primary: '#94FFC9',
-					secondary: '#222222',
-					background: '#EFFFF6',
-					accent: '#00D4AA',
+					primary: 'hsl(var(--saikou-primary))',
+					'primary-dark': 'hsl(var(--saikou-primary-dark))',
+					secondary: 'hsl(var(--saikou-secondary))',
+					background: 'hsl(var(--saikou-background))',
+					accent: 'hsl(var(--saikou-accent))',
+					'accent-light': 'hsl(var(--saikou-accent-light))',
+					text: 'hsl(var(--saikou-text))',
+					border: 'hsl(var(--saikou-border))',
 				},
 				border: 'hsl(var(--border))',
 				input: 'hsl(var(--input))',
@@ -105,3 +109,4 @@ export default {
 	},
 	plugins: [require("tailwindcss-animate")],
 } satisfies Config;
+
