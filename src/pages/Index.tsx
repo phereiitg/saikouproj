@@ -1,87 +1,29 @@
 
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import {
-  Zap,
-  Star,
-  Shield,
-  Truck,
-  Heart,
-  ChevronLeft,
-  ChevronRight
-} from 'lucide-react';
+import { ChevronLeft, ChevronRight, Star, Shield, Heart, Zap, MessageSquare, ExternalLink, Mail } from 'lucide-react';
 import PageTransition from '../components/PageTransition';
 
 const Index = () => {
   const [currentSlide, setCurrentSlide] = useState(0);
   const [cart, setCart] = useState<Array<{id: string, name: string, price: string}>>([]);
   const [showCartNotification, setShowCartNotification] = useState(false);
+  const [email, setEmail] = useState('');
 
-  const slides = [
+  const heroSlides = [
     {
-      id: 1,
-      title: "Superman Premium Action Figure",
-      subtitle: "Strike a pose with the Last Son of Krypton!",
-      description: "This Man of Steel action figure by Saikou is a full-sized, high-detail collectible built for bold shelves and true fans.",
-      price: "₹4,999",
-      image: "/lovable-uploads/3c35d07e-c58f-4fb2-8ba1-7aa5ed88a07f.png",
-      badge: "Premium",
-      collection: "Saikou Collection"
+      title: "Unbox the Legends.",
+      subtitle: "Premium collectible action figures crafted with precision",
+      cta: "Explore Our Best Sellers",
+      ctaLink: "/products",
+      image: "/lovable-uploads/3c35d07e-c58f-4fb2-8ba1-7aa5ed88a07f.png"
     },
     {
-      id: 2,
-      title: "Hulk Patreon Edition Statue",
-      subtitle: "Unleash the incredible power!",
-      description: "This exclusive Hulk statue features dynamic pose and premium finish. Limited edition collectible for true Marvel fans.",
-      price: "₹6,499",
-      image: "/lovable-uploads/8940d71d-abcb-4bb1-898b-4e5efeb18613.png",
-      badge: "Limited",
-      collection: "Saikou Collection"
-    },
-    {
-      id: 3,
-      title: "Anime Warrior Dark Edition",
-      subtitle: "Bring your favorite anime character to life!",
-      description: "Detailed premium figure perfect for collectors and anime enthusiasts. Features incredible attention to detail.",
-      price: "₹5,999",
-      image: "/lovable-uploads/f753d099-696b-46b8-a5ec-44a8a086abb7.png",
-      badge: "Exclusive",
-      collection: "Ikon Collection"
-    }
-  ];
-
-  const featuredProducts = [
-    {
-      id: '1',
-      name: 'Superman Premium Action Figure',
-      price: '₹4,999',
-      image: '/lovable-uploads/3c35d07e-c58f-4fb2-8ba1-7aa5ed88a07f.png',
-      badge: 'Premium',
-      collection: 'Saikou Collection'
-    },
-    {
-      id: '2', 
-      name: 'Hulk Patreon Edition Statue',
-      price: '₹6,499',
-      image: '/lovable-uploads/8940d71d-abcb-4bb1-898b-4e5efeb18613.png',
-      badge: 'Limited',
-      collection: 'Saikou Collection'
-    },
-    {
-      id: '3',
-      name: 'Anime Warrior Dark Edition',
-      price: '₹5,999', 
-      image: '/lovable-uploads/f753d099-696b-46b8-a5ec-44a8a086abb7.png',
-      badge: 'Exclusive',
-      collection: 'Ikon Collection'
-    },
-    {
-      id: '4',
-      name: 'Batman Dark Knight Figure',
-      price: '₹4,799',
-      image: '/lovable-uploads/3c35d07e-c58f-4fb2-8ba1-7aa5ed88a07f.png',
-      badge: 'New',
-      collection: 'Saikou Collection'
+      title: "Legends Arrive Soon.",
+      subtitle: "Get notified about upcoming drops and exclusive releases",
+      cta: "Notify Me on Upcoming Drops",
+      ctaLink: "#newsletter",
+      image: "/lovable-uploads/8940d71d-abcb-4bb1-898b-4e5efeb18613.png"
     }
   ];
 
@@ -94,11 +36,17 @@ const Index = () => {
   };
 
   const nextSlide = () => {
-    setCurrentSlide((prev) => (prev + 1) % slides.length);
+    setCurrentSlide((prev) => (prev + 1) % heroSlides.length);
   };
 
   const prevSlide = () => {
-    setCurrentSlide((prev) => (prev - 1 + slides.length) % slides.length);
+    setCurrentSlide((prev) => (prev - 1 + heroSlides.length) % heroSlides.length);
+  };
+
+  const handleNewsletterSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    alert('Thanks for subscribing! We\'ll notify you about new releases.');
+    setEmail('');
   };
 
   useEffect(() => {
@@ -131,6 +79,12 @@ const Index = () => {
                 <Link to="/products" className="text-saikou-secondary font-darker-grotesque font-medium hover:text-saikou-accent transition-colors">
                   Products
                 </Link>
+                <Link to="/about-us" className="text-saikou-secondary font-darker-grotesque font-medium hover:text-saikou-accent transition-colors">
+                  About Us
+                </Link>
+                <Link to="/contact-us" className="text-saikou-secondary font-darker-grotesque font-medium hover:text-saikou-accent transition-colors">
+                  Contact Us
+                </Link>
                 <Link to="/my-account" className="text-saikou-secondary font-darker-grotesque font-medium hover:text-saikou-accent transition-colors">
                   My Account
                 </Link>
@@ -145,13 +99,13 @@ const Index = () => {
           </nav>
         </header>
 
-        {/* Hero Slideshow */}
+        {/* 1. Hero Banner (Slideshow) */}
         <section className="pt-24 bg-gradient-to-br from-saikou-background via-white to-saikou-background relative overflow-hidden">
           <div className="container mx-auto px-4 py-16">
             <div className="relative">
-              {slides.map((slide, index) => (
+              {heroSlides.map((slide, index) => (
                 <div
-                  key={slide.id}
+                  key={index}
                   className={`transition-all duration-700 ease-in-out ${
                     index === currentSlide 
                       ? 'opacity-100 translate-x-0' 
@@ -160,33 +114,19 @@ const Index = () => {
                 >
                   <div className="grid lg:grid-cols-2 gap-12 items-center min-h-[600px]">
                     <div className="space-y-8">
-                      <div className="inline-block bg-gradient-to-r from-saikou-accent to-saikou-primary text-white px-4 py-2 rounded-full text-sm font-darker-grotesque font-semibold">
-                        {slide.badge} • {slide.collection}
-                      </div>
                       <h1 className="text-4xl lg:text-6xl font-space-grotesk font-bold leading-tight bg-gradient-to-r from-saikou-secondary to-saikou-accent bg-clip-text text-transparent">
                         {slide.title}
                       </h1>
                       <p className="text-xl font-darker-grotesque text-gray-600 leading-relaxed">
-                        {slide.description}
+                        {slide.subtitle}
                       </p>
-                      <div className="flex items-center gap-6">
-                        <span className="text-3xl font-space-grotesk font-bold text-saikou-accent">
-                          {slide.price}
-                        </span>
-                        <div className="flex gap-3">
-                          <Link 
-                            to={`/product/${slide.id}`}
-                            className="bg-saikou-background text-saikou-secondary px-8 py-3 rounded-lg font-darker-grotesque font-semibold hover:bg-saikou-primary transition-all"
-                          >
-                            View Details
-                          </Link>
-                          <button 
-                            onClick={() => addToCart(slide.id.toString(), slide.title, slide.price)}
-                            className="bg-gradient-to-r from-saikou-primary to-saikou-accent text-saikou-secondary px-8 py-3 rounded-lg font-darker-grotesque font-semibold hover:shadow-lg transition-all"
-                          >
-                            Add to Cart
-                          </button>
-                        </div>
+                      <div className="flex gap-4">
+                        <Link 
+                          to={slide.ctaLink}
+                          className="bg-gradient-to-r from-saikou-primary to-saikou-accent text-saikou-secondary px-8 py-4 rounded-lg font-darker-grotesque font-semibold hover:shadow-lg transition-all"
+                        >
+                          {slide.cta}
+                        </Link>
                       </div>
                     </div>
                     <div className="relative">
@@ -201,23 +141,16 @@ const Index = () => {
                 </div>
               ))}
               
-              {/* Navigation buttons */}
-              <button
-                onClick={prevSlide}
-                className="absolute left-4 top-1/2 transform -translate-y-1/2 bg-white/80 backdrop-blur-sm p-3 rounded-full shadow-lg hover:bg-white transition-all z-10"
-              >
+              {/* Navigation */}
+              <button onClick={prevSlide} className="absolute left-4 top-1/2 transform -translate-y-1/2 bg-white/80 backdrop-blur-sm p-3 rounded-full shadow-lg hover:bg-white transition-all z-10">
                 <ChevronLeft className="w-6 h-6 text-saikou-secondary" />
               </button>
-              <button
-                onClick={nextSlide}
-                className="absolute right-4 top-1/2 transform -translate-y-1/2 bg-white/80 backdrop-blur-sm p-3 rounded-full shadow-lg hover:bg-white transition-all z-10"
-              >
+              <button onClick={nextSlide} className="absolute right-4 top-1/2 transform -translate-y-1/2 bg-white/80 backdrop-blur-sm p-3 rounded-full shadow-lg hover:bg-white transition-all z-10">
                 <ChevronRight className="w-6 h-6 text-saikou-secondary" />
               </button>
               
-              {/* Slide indicators */}
               <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 flex gap-3">
-                {slides.map((_, index) => (
+                {heroSlides.map((_, index) => (
                   <button
                     key={index}
                     onClick={() => setCurrentSlide(index)}
@@ -233,202 +166,444 @@ const Index = () => {
           </div>
         </section>
 
-        {/* Who We Are Section */}
-        <section className="py-20 bg-white relative overflow-hidden">
-          <div className="absolute inset-0 bg-gradient-to-br from-saikou-background/30 to-transparent"></div>
-          <div className="container mx-auto px-4 relative z-10">
+        {/* 2. About Saikou (Intro) */}
+        <section className="py-20 bg-white">
+          <div className="container mx-auto px-4">
             <div className="grid lg:grid-cols-2 gap-16 items-center">
               <div className="space-y-8">
-                <div className="space-y-4">
-                  <h2 className="text-4xl font-space-grotesk font-bold text-saikou-secondary">
-                    Who We Are
-                  </h2>
-                  <div className="w-20 h-1 bg-gradient-to-r from-saikou-primary to-saikou-accent rounded-full"></div>
-                </div>
-                
-                <div className="space-y-6 text-gray-600 font-darker-grotesque text-lg leading-relaxed">
-                  <p>
-                    <strong className="text-saikou-accent">Saikou</strong> represents the pinnacle of collectible action figures in India. We craft premium, high-detail collectibles that bring your favorite characters to life with unmatched quality and attention to detail.
-                  </p>
-                  
-                  <p>
-                    Our <strong className="text-saikou-accent">Ikon Collection</strong> features carefully curated anime and manga figures, while our <strong className="text-saikou-accent">Saikou Collection</strong> showcases legendary superheroes and pop culture icons.
-                  </p>
-                  
-                  <p>
-                    Every piece is designed for collectors who demand excellence - from the dynamic poses to the premium finishes that make each figure a true work of art.
-                  </p>
-                </div>
-
-                <div className="grid grid-cols-2 gap-6 mt-8">
-                  <div className="text-center p-6 bg-gradient-to-br from-saikou-background to-white rounded-xl shadow-lg">
-                    <div className="text-3xl font-space-grotesk font-bold text-saikou-accent mb-2">500+</div>
-                    <div className="text-sm font-darker-grotesque text-gray-600">Happy Collectors</div>
-                  </div>
-                  <div className="text-center p-6 bg-gradient-to-br from-saikou-background to-white rounded-xl shadow-lg">
-                    <div className="text-3xl font-space-grotesk font-bold text-saikou-accent mb-2">50+</div>
-                    <div className="text-sm font-darker-grotesque text-gray-600">Premium Figures</div>
-                  </div>
-                </div>
-              </div>
-              
-              <div className="relative">
-                <div className="grid grid-cols-2 gap-4">
-                  <div className="space-y-4">
-                    <img 
-                      src="/lovable-uploads/3e213b54-d1c4-457a-8f53-e7fa0d65b186.png" 
-                      alt="Saikou Brand"
-                      className="w-full rounded-xl shadow-lg"
-                    />
-                    <img 
-                      src="/lovable-uploads/3c35d07e-c58f-4fb2-8ba1-7aa5ed88a07f.png" 
-                      alt="Premium Figure"
-                      className="w-full rounded-xl shadow-lg"
-                    />
-                  </div>
-                  <div className="space-y-4 mt-8">
-                    <img 
-                      src="/lovable-uploads/adb51653-88fb-466e-847a-c336186d8603.png" 
-                      alt="Ikon Brand"
-                      className="w-full rounded-xl shadow-lg"
-                    />
-                    <img 
-                      src="/lovable-uploads/f753d099-696b-46b8-a5ec-44a8a086abb7.png" 
-                      alt="Anime Figure"
-                      className="w-full rounded-xl shadow-lg"
-                    />
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        {/* Why Choose Saikou Section - with animations */}
-        <section className="py-20 bg-gradient-to-br from-saikou-background to-white">
-          <div className="container mx-auto px-4">
-            <div className="text-center mb-16">
-              <h2 className="text-4xl font-space-grotesk font-bold mb-4 bg-gradient-to-r from-saikou-secondary to-saikou-accent bg-clip-text text-transparent transform hover:scale-105 transition-transform duration-300">
-                Why Choose Saikou?
-              </h2>
-              <p className="text-xl font-darker-grotesque text-gray-600 max-w-2xl mx-auto">
-                Experience the difference with premium quality, authentic designs, and exceptional attention to detail.
-              </p>
-              <div className="w-24 h-1 bg-gradient-to-r from-saikou-primary to-saikou-accent mx-auto rounded-full mt-6"></div>
-            </div>
-            
-            <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
-              {[
-                { icon: Star, title: "Premium Quality", desc: "Highest quality materials and craftsmanship in every piece" },
-                { icon: Shield, title: "Authentic Designs", desc: "Officially licensed and carefully detailed replicas" },
-                { icon: Truck, title: "Fast Delivery", desc: "Quick and secure shipping across India" },
-                { icon: Heart, title: "Made in India", desc: "Proudly crafted in India with love and precision" }
-              ].map((feature, index) => (
-                <div 
-                  key={index} 
-                  className="text-center p-8 bg-white/80 backdrop-blur-sm rounded-xl shadow-lg hover:shadow-xl hover:scale-105 transition-all duration-300 transform group animate-fade-in"
-                  style={{ animationDelay: `${index * 0.1}s` }}
+                <h2 className="text-4xl font-space-grotesk font-bold text-saikou-secondary">
+                  Not Just Figures—Shelf Royalty.
+                </h2>
+                <p className="text-lg font-darker-grotesque text-gray-600 leading-relaxed">
+                  At Saikou, we craft high-quality collectible action figures inspired by anime, gaming, superheroes, and legends. Made in India, built for shelves that demand more.
+                </p>
+                <Link 
+                  to="/about-us"
+                  className="inline-block bg-gradient-to-r from-saikou-primary to-saikou-accent text-saikou-secondary px-8 py-4 rounded-lg font-darker-grotesque font-semibold hover:shadow-lg transition-all"
                 >
-                  <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-r from-saikou-primary to-saikou-accent rounded-full mb-6 group-hover:scale-110 transition-transform duration-300">
-                    <feature.icon className="w-8 h-8 text-saikou-secondary" />
-                  </div>
-                  <h3 className="text-xl font-space-grotesk font-semibold mb-3 text-saikou-secondary group-hover:text-saikou-accent transition-colors duration-300">
-                    {feature.title}
-                  </h3>
-                  <p className="font-darker-grotesque text-gray-600 group-hover:text-gray-700 transition-colors duration-300">
-                    {feature.desc}
-                  </p>
-                </div>
-              ))}
+                  Read More About Us
+                </Link>
+              </div>
+              <div className="relative">
+                <img 
+                  src="/lovable-uploads/3e213b54-d1c4-457a-8f53-e7fa0d65b186.png" 
+                  alt="Saikou Crafting Process" 
+                  className="w-full rounded-xl shadow-lg"
+                />
+              </div>
             </div>
           </div>
         </section>
 
-        {/* Featured Products */}
-        <section className="py-20 bg-white">
+        {/* 3. Featured Collections: Saikou vs Ikon */}
+        <section className="py-20 bg-gradient-to-br from-saikou-background to-white">
           <div className="container mx-auto px-4">
             <div className="text-center mb-16">
               <h2 className="text-4xl font-space-grotesk font-bold mb-4 bg-gradient-to-r from-saikou-secondary to-saikou-accent bg-clip-text text-transparent">
                 Featured Collections
               </h2>
-              <p className="text-xl font-darker-grotesque text-gray-600 max-w-2xl mx-auto">
-                Discover our most popular premium action figures and collectibles.
-              </p>
-              <div className="w-24 h-1 bg-gradient-to-r from-saikou-primary to-saikou-accent mx-auto rounded-full mt-6"></div>
+              <div className="w-24 h-1 bg-gradient-to-r from-saikou-primary to-saikou-accent mx-auto rounded-full"></div>
             </div>
             
-            <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
-              {featuredProducts.map((product) => (
-                <div 
-                  key={product.id} 
-                  className="bg-white/80 backdrop-blur-sm rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-all border border-gray-100"
+            <div className="grid lg:grid-cols-2 gap-12">
+              <div className="bg-white/80 backdrop-blur-sm rounded-xl p-8 shadow-lg">
+                <h3 className="text-2xl font-space-grotesk font-bold text-saikou-secondary mb-4">Saikou</h3>
+                <p className="text-gray-600 font-darker-grotesque mb-6">Full-scene action figures (dynamic poses, full bases).</p>
+                <Link 
+                  to="/products"
+                  className="bg-gradient-to-r from-saikou-primary to-saikou-accent text-saikou-secondary px-6 py-3 rounded-lg font-darker-grotesque font-semibold hover:shadow-lg transition-all inline-block"
                 >
-                  <div className="relative h-64 overflow-hidden">
-                    <img 
-                      src={product.image} 
-                      alt={product.name} 
-                      className="w-full h-full object-contain p-4"
-                    />
-                    <div className="absolute top-4 right-4 bg-gradient-to-r from-saikou-accent to-saikou-primary text-white px-3 py-1 rounded-full text-sm font-darker-grotesque font-semibold shadow-lg">
-                      {product.badge}
-                    </div>
-                  </div>
-                  <div className="p-6">
-                    <h3 className="text-lg font-space-grotesk font-semibold mb-2 text-saikou-secondary">
-                      {product.name}
-                    </h3>
-                    <p className="text-sm font-darker-grotesque text-gray-500 mb-4">{product.collection}</p>
-                    <p className="text-xl font-space-grotesk font-bold text-saikou-accent mb-4">{product.price}</p>
-                    <div className="flex gap-2">
-                      <Link 
-                        to={`/product/${product.id}`}
-                        className="flex-1 bg-saikou-background text-saikou-secondary py-2 rounded-lg font-darker-grotesque font-semibold hover:bg-saikou-primary transition-all text-center"
-                      >
-                        View
-                      </Link>
-                      <button 
-                        onClick={() => addToCart(product.id, product.name, product.price)}
-                        className="flex-1 bg-gradient-to-r from-saikou-primary to-saikou-accent text-saikou-secondary py-2 rounded-lg font-darker-grotesque font-semibold hover:shadow-lg transition-all"
-                      >
-                        Add to Cart
-                      </button>
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </div>
-            
-            <div className="text-center mt-12">
-              <Link 
-                to="/products" 
-                className="inline-block bg-gradient-to-r from-saikou-primary to-saikou-accent text-saikou-secondary px-8 py-4 rounded-lg font-darker-grotesque font-semibold hover:shadow-lg transition-all"
-              >
-                View All Products
-              </Link>
+                  Shop Saikou
+                </Link>
+              </div>
+              
+              <div className="bg-white/80 backdrop-blur-sm rounded-xl p-8 shadow-lg">
+                <h3 className="text-2xl font-space-grotesk font-bold text-saikou-secondary mb-4">Ikon</h3>
+                <p className="text-gray-600 font-darker-grotesque mb-6">Bold, bust-style statues (clean display, strong character energy).</p>
+                <Link 
+                  to="/products"
+                  className="bg-saikou-background border-2 border-saikou-primary text-saikou-secondary px-6 py-3 rounded-lg font-darker-grotesque font-semibold hover:bg-saikou-primary transition-all inline-block"
+                >
+                  Shop Ikon
+                </Link>
+              </div>
             </div>
           </div>
         </section>
 
-        {/* Newsletter Section */}
-        <section className="py-16 bg-gradient-to-br from-saikou-secondary to-gray-800 text-white relative overflow-hidden">
-          <div className="absolute inset-0 bg-gradient-to-r from-saikou-accent/10 to-saikou-primary/10"></div>
+        {/* 4. Top Product: Superman */}
+        <section className="py-20 bg-white">
+          <div className="container mx-auto px-4">
+            <div className="grid lg:grid-cols-2 gap-16 items-center">
+              <div className="space-y-8">
+                <h2 className="text-4xl font-space-grotesk font-bold text-saikou-secondary">
+                  Kal-El lands with power.
+                </h2>
+                <p className="text-lg font-darker-grotesque text-gray-600 leading-relaxed">
+                  Explore the "Man of Steel" premium figurine from Saikou. Dynamic cape. Volcanic base. Pure shelf dominance.
+                </p>
+                <div className="flex gap-4">
+                  <Link 
+                    to="/product/1"
+                    className="bg-gradient-to-r from-saikou-primary to-saikou-accent text-saikou-secondary px-8 py-4 rounded-lg font-darker-grotesque font-semibold hover:shadow-lg transition-all"
+                  >
+                    View Product
+                  </Link>
+                  <button 
+                    onClick={() => addToCart('1', 'Superman Premium Action Figure', '₹4,999')}
+                    className="bg-saikou-background border-2 border-saikou-primary text-saikou-secondary px-8 py-4 rounded-lg font-darker-grotesque font-semibold hover:bg-saikou-primary transition-all"
+                  >
+                    Add to Cart
+                  </button>
+                </div>
+              </div>
+              <div className="relative">
+                <img 
+                  src="/lovable-uploads/3c35d07e-c58f-4fb2-8ba1-7aa5ed88a07f.png" 
+                  alt="Superman Premium Action Figure" 
+                  className="w-full max-w-md mx-auto"
+                />
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* 5. Top Product: Sung Jin-Woo */}
+        <section className="py-20 bg-gradient-to-br from-gray-900 to-black text-white relative overflow-hidden">
+          <div className="absolute inset-0 bg-gradient-to-r from-purple-900/20 to-blue-900/20"></div>
           <div className="container mx-auto px-4 relative z-10">
+            <div className="grid lg:grid-cols-2 gap-16 items-center">
+              <div className="space-y-8">
+                <h2 className="text-4xl font-space-grotesk font-bold">
+                  "He's not a hunter anymore—he's a monarch."
+                </h2>
+                <p className="text-lg font-darker-grotesque text-gray-300 leading-relaxed">
+                  The Shadow Monarch figurine from Solo Leveling is now available. Dark energy, dual blades, and full anime power.
+                </p>
+                <div className="flex gap-4">
+                  <Link 
+                    to="/product/3"
+                    className="bg-gradient-to-r from-purple-600 to-blue-600 text-white px-8 py-4 rounded-lg font-darker-grotesque font-semibold hover:shadow-lg transition-all"
+                  >
+                    Buy Now
+                  </Link>
+                </div>
+              </div>
+              <div className="relative">
+                <img 
+                  src="/lovable-uploads/f753d099-696b-46b8-a5ec-44a8a086abb7.png" 
+                  alt="Sung Jin-Woo Shadow Monarch" 
+                  className="w-full max-w-md mx-auto"
+                />
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* 6. New Launches & Upcoming Drops */}
+        <section className="py-20 bg-gradient-to-br from-saikou-background to-white">
+          <div className="container mx-auto px-4">
+            <div className="grid lg:grid-cols-2 gap-16 items-center">
+              <div className="space-y-8">
+                <h2 className="text-4xl font-space-grotesk font-bold text-saikou-secondary">
+                  Legends are loading…
+                </h2>
+                <p className="text-lg font-darker-grotesque text-gray-600 leading-relaxed">
+                  From Gojo to Itachi, get ready for future drops based on your votes.
+                </p>
+                <a 
+                  href="#newsletter"
+                  className="inline-block bg-gradient-to-r from-saikou-primary to-saikou-accent text-saikou-secondary px-8 py-4 rounded-lg font-darker-grotesque font-semibold hover:shadow-lg transition-all"
+                >
+                  Notify Me
+                </a>
+              </div>
+              <div className="relative">
+                <div className="grid grid-cols-2 gap-4">
+                  <img 
+                    src="/lovable-uploads/8940d71d-abcb-4bb1-898b-4e5efeb18613.png" 
+                    alt="Upcoming Drop 1" 
+                    className="w-full rounded-xl shadow-lg opacity-60 hover:opacity-100 transition-opacity"
+                  />
+                  <img 
+                    src="/lovable-uploads/f753d099-696b-46b8-a5ec-44a8a086abb7.png" 
+                    alt="Upcoming Drop 2" 
+                    className="w-full rounded-xl shadow-lg opacity-60 hover:opacity-100 transition-opacity"
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* 7. Our USPs */}
+        <section className="py-20 bg-white">
+          <div className="container mx-auto px-4">
+            <div className="grid lg:grid-cols-2 gap-16 items-center">
+              <div className="space-y-8">
+                <h2 className="text-4xl font-space-grotesk font-bold text-saikou-secondary mb-8">
+                  Why Choose Saikou?
+                </h2>
+                <div className="space-y-6">
+                  <div className="flex items-center gap-4">
+                    <span className="text-2xl">🇮🇳</span>
+                    <div>
+                      <h3 className="text-xl font-space-grotesk font-semibold text-saikou-secondary">Made Here. Not Meh.</h3>
+                      <p className="font-darker-grotesque text-gray-600">Proudly crafted in India with global quality standards</p>
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-4">
+                    <span className="text-2xl">🧐</span>
+                    <div>
+                      <h3 className="text-xl font-space-grotesk font-semibold text-saikou-secondary">Details So Good, It's Rude.</h3>
+                      <p className="font-darker-grotesque text-gray-600">Obsessing over every detail, from expressions to textures</p>
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-4">
+                    <span className="text-2xl">🧠</span>
+                    <div>
+                      <h3 className="text-xl font-space-grotesk font-semibold text-saikou-secondary">For Collectors, Not Kids.</h3>
+                      <p className="font-darker-grotesque text-gray-600">Display-worthy collectibles for serious fans</p>
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-4">
+                    <span className="text-2xl">🎁</span>
+                    <div>
+                      <h3 className="text-xl font-space-grotesk font-semibold text-saikou-secondary">Gift It. Brag About It.</h3>
+                      <p className="font-darker-grotesque text-gray-600">Perfect gifts that impress even the nerdiest hearts</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div className="text-center">
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="p-6 bg-gradient-to-br from-saikou-background to-white rounded-xl shadow-lg">
+                    <Star className="w-8 h-8 text-saikou-accent mx-auto mb-2" />
+                    <div className="text-2xl font-space-grotesk font-bold text-saikou-accent">Premium</div>
+                    <div className="text-sm font-darker-grotesque text-gray-600">Quality</div>
+                  </div>
+                  <div className="p-6 bg-gradient-to-br from-saikou-background to-white rounded-xl shadow-lg">
+                    <Shield className="w-8 h-8 text-saikou-accent mx-auto mb-2" />
+                    <div className="text-2xl font-space-grotesk font-bold text-saikou-accent">100%</div>
+                    <div className="text-sm font-darker-grotesque text-gray-600">Authentic</div>
+                  </div>
+                  <div className="p-6 bg-gradient-to-br from-saikou-background to-white rounded-xl shadow-lg">
+                    <Heart className="w-8 h-8 text-saikou-accent mx-auto mb-2" />
+                    <div className="text-2xl font-space-grotesk font-bold text-saikou-accent">Made</div>
+                    <div className="text-sm font-darker-grotesque text-gray-600">in India</div>
+                  </div>
+                  <div className="p-6 bg-gradient-to-br from-saikou-background to-white rounded-xl shadow-lg">
+                    <Zap className="w-8 h-8 text-saikou-accent mx-auto mb-2" />
+                    <div className="text-2xl font-space-grotesk font-bold text-saikou-accent">Fast</div>
+                    <div className="text-sm font-darker-grotesque text-gray-600">Delivery</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* 8. Join the Saikou WhatsApp Community */}
+        <section className="py-20 bg-gradient-to-br from-green-500 to-green-600 text-white">
+          <div className="container mx-auto px-4">
+            <div className="grid lg:grid-cols-2 gap-16 items-center">
+              <div className="space-y-8">
+                <h2 className="text-4xl font-space-grotesk font-bold">
+                  💬 "Talk Nerdy to Us."
+                </h2>
+                <p className="text-lg font-darker-grotesque leading-relaxed opacity-90">
+                  Be part of our fan-first community. Vote on figures, get early drops, share suggestions.
+                </p>
+                <a 
+                  href="https://chat.whatsapp.com/LdEzPs02oZ2LcMy5fhnH5T"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-2 bg-white text-green-600 px-8 py-4 rounded-lg font-darker-grotesque font-semibold hover:bg-gray-100 transition-all"
+                >
+                  <MessageSquare className="w-5 h-5" />
+                  Join Now
+                  <ExternalLink className="w-4 h-4" />
+                </a>
+              </div>
+              <div className="text-center">
+                <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-8">
+                  <MessageSquare className="w-16 h-16 mx-auto mb-4 opacity-80" />
+                  <p className="text-lg font-darker-grotesque opacity-80">Join 500+ collectors in our community</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* 9. Fan Picks: Top 10 Most-Wanted Anime Characters */}
+        <section className="py-20 bg-white">
+          <div className="container mx-auto px-4">
+            <div className="grid lg:grid-cols-2 gap-16 items-center">
+              <div className="space-y-8">
+                <h2 className="text-4xl font-space-grotesk font-bold text-saikou-secondary">
+                  🔥 Fan Demand is Real.
+                </h2>
+                <p className="text-lg font-darker-grotesque text-gray-600 leading-relaxed">
+                  See who's trending: Gojo, Naruto, Levi, Sukuna and more!
+                </p>
+                <a 
+                  href="#"
+                  className="inline-block bg-gradient-to-r from-saikou-primary to-saikou-accent text-saikou-secondary px-8 py-4 rounded-lg font-darker-grotesque font-semibold hover:shadow-lg transition-all"
+                >
+                  Read Blog
+                </a>
+              </div>
+              <div className="grid grid-cols-2 gap-4">
+                <img 
+                  src="/lovable-uploads/f753d099-696b-46b8-a5ec-44a8a086abb7.png" 
+                  alt="Popular Anime Character" 
+                  className="w-full rounded-xl shadow-lg"
+                />
+                <img 
+                  src="/lovable-uploads/8940d71d-abcb-4bb1-898b-4e5efeb18613.png" 
+                  alt="Popular Character" 
+                  className="w-full rounded-xl shadow-lg"
+                />
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* 10. Blog Highlight Section */}
+        <section className="py-20 bg-gradient-to-br from-saikou-background to-white">
+          <div className="container mx-auto px-4">
+            <div className="grid lg:grid-cols-2 gap-16 items-center">
+              <div className="space-y-8">
+                <h2 className="text-4xl font-space-grotesk font-bold text-saikou-secondary">
+                  📰 From Krypton to Konoha
+                </h2>
+                <p className="text-lg font-darker-grotesque text-gray-600 leading-relaxed">
+                  Stay updated on the DCU reboot, anime news, and collector trends.
+                </p>
+                <a 
+                  href="#"
+                  className="inline-block bg-gradient-to-r from-saikou-primary to-saikou-accent text-saikou-secondary px-8 py-4 rounded-lg font-darker-grotesque font-semibold hover:shadow-lg transition-all"
+                >
+                  Visit Blog
+                </a>
+              </div>
+              <div className="relative">
+                <img 
+                  src="/lovable-uploads/3c35d07e-c58f-4fb2-8ba1-7aa5ed88a07f.png" 
+                  alt="Blog Preview" 
+                  className="w-full rounded-xl shadow-lg"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent rounded-xl flex items-end p-6">
+                  <p className="text-white font-darker-grotesque font-semibold">Latest: DCU Superman Reboot Analysis</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* 11. Customer Testimonials / Reviews */}
+        <section className="py-20 bg-white">
+          <div className="container mx-auto px-4">
+            <div className="text-center mb-16">
+              <h2 className="text-4xl font-space-grotesk font-bold mb-4 text-saikou-secondary">
+                What Our Collectors Say
+              </h2>
+              <div className="w-24 h-1 bg-gradient-to-r from-saikou-primary to-saikou-accent mx-auto rounded-full"></div>
+            </div>
+            
+            <div className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+              <div className="bg-gradient-to-br from-saikou-background to-white p-8 rounded-xl shadow-lg">
+                <div className="flex items-center mb-4">
+                  {[...Array(5)].map((_, i) => (
+                    <Star key={i} className="w-5 h-5 text-yellow-400 fill-current" />
+                  ))}
+                </div>
+                <p className="font-darker-grotesque text-gray-700 mb-4 italic">
+                  "This figure turned my shelf into a shrine."
+                </p>
+                <p className="font-darker-grotesque font-semibold text-saikou-secondary">— Aryan, Pune</p>
+              </div>
+              
+              <div className="bg-gradient-to-br from-saikou-background to-white p-8 rounded-xl shadow-lg">
+                <div className="flex items-center mb-4">
+                  {[...Array(5)].map((_, i) => (
+                    <Star key={i} className="w-5 h-5 text-yellow-400 fill-current" />
+                  ))}
+                </div>
+                <p className="font-darker-grotesque text-gray-700 mb-4 italic">
+                  "Blown away by the detail. Worth every rupee."
+                </p>
+                <p className="font-darker-grotesque font-semibold text-saikou-secondary">— Sneha, Delhi</p>
+              </div>
+            </div>
+            
+            <div className="text-center mt-12">
+              <a 
+                href="#"
+                className="inline-block bg-saikou-background border-2 border-saikou-primary text-saikou-secondary px-8 py-4 rounded-lg font-darker-grotesque font-semibold hover:bg-saikou-primary transition-all"
+              >
+                View All Reviews
+              </a>
+            </div>
+          </div>
+        </section>
+
+        {/* 12. Gifting Section */}
+        <section className="py-20 bg-gradient-to-br from-red-50 to-pink-50">
+          <div className="container mx-auto px-4">
+            <div className="grid lg:grid-cols-2 gap-16 items-center">
+              <div className="space-y-8">
+                <h2 className="text-4xl font-space-grotesk font-bold text-saikou-secondary">
+                  🎁 "Gift It. Brag About It."
+                </h2>
+                <p className="text-lg font-darker-grotesque text-gray-600 leading-relaxed">
+                  Looking for the perfect fan gift? Our collectibles are designed to impress even the nerdiest hearts.
+                </p>
+                <a 
+                  href="#"
+                  className="inline-block bg-gradient-to-r from-red-500 to-pink-500 text-white px-8 py-4 rounded-lg font-darker-grotesque font-semibold hover:shadow-lg transition-all"
+                >
+                  Gift Guide
+                </a>
+              </div>
+              <div className="relative">
+                <img 
+                  src="/lovable-uploads/3c35d07e-c58f-4fb2-8ba1-7aa5ed88a07f.png" 
+                  alt="Perfect Gift" 
+                  className="w-full max-w-md mx-auto"
+                />
+                <div className="absolute -top-4 -right-4 bg-red-500 text-white p-3 rounded-full">
+                  <span className="text-2xl">🎁</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* 13. Newsletter Signup */}
+        <section id="newsletter" className="py-16 bg-gradient-to-br from-saikou-secondary to-gray-800 text-white">
+          <div className="container mx-auto px-4">
             <div className="max-w-2xl mx-auto text-center">
-              <h2 className="text-3xl font-space-grotesk font-bold mb-4">Stay Updated</h2>
+              <h2 className="text-3xl font-space-grotesk font-bold mb-4">
+                📬 "Don't Miss the Drop."
+              </h2>
               <p className="font-darker-grotesque text-lg mb-8 opacity-90">
-                Get notified about new releases and exclusive offers!
+                Get alerts before anyone else. Previews, exclusives, and early-bird perks.
               </p>
-              <form className="flex flex-col sm:flex-row gap-4 max-w-md mx-auto">
+              <form onSubmit={handleNewsletterSubmit} className="flex flex-col sm:flex-row gap-4 max-w-md mx-auto">
                 <input 
                   type="email" 
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
                   placeholder="Your email address" 
                   required
                   className="flex-1 px-4 py-3 rounded-lg text-saikou-secondary font-darker-grotesque border-2 border-transparent focus:border-saikou-primary transition-all"
                 />
                 <button 
                   type="submit"
-                  className="bg-gradient-to-r from-saikou-primary to-saikou-accent text-saikou-secondary px-6 py-3 rounded-lg font-darker-grotesque font-semibold hover:shadow-lg transition-all"
+                  className="bg-gradient-to-r from-saikou-primary to-saikou-accent text-saikou-secondary px-6 py-3 rounded-lg font-darker-grotesque font-semibold hover:shadow-lg transition-all flex items-center justify-center gap-2"
                 >
+                  <Mail className="w-4 h-4" />
                   Subscribe
                 </button>
               </form>
@@ -439,25 +614,48 @@ const Index = () => {
         {/* Footer */}
         <footer className="py-12 bg-gradient-to-br from-saikou-secondary to-gray-800 text-white">
           <div className="container mx-auto px-4">
-            <div className="flex flex-col md:flex-row justify-between items-center mb-8">
-              <div className="mb-6 md:mb-0 flex items-center gap-3">
-                <img 
-                  src="/lovable-uploads/3e213b54-d1c4-457a-8f53-e7fa0d65b186.png" 
-                  alt="Saikou Logo" 
-                  className="h-8 w-auto filter brightness-0 invert"
-                />
-                <div>
-                  <p className="font-darker-grotesque opacity-80">Premium collectibles. Made in India.</p>
-                </div>
+            <div className="grid md:grid-cols-4 gap-8 mb-8">
+              <div>
+                <h4 className="font-space-grotesk font-semibold mb-4">Explore</h4>
+                <ul className="space-y-2 font-darker-grotesque">
+                  <li><Link to="/" className="opacity-80 hover:opacity-100 hover:text-saikou-primary transition-all">Home</Link></li>
+                  <li><Link to="/products" className="opacity-80 hover:opacity-100 hover:text-saikou-primary transition-all">Shop Saikou</Link></li>
+                  <li><Link to="/products" className="opacity-80 hover:opacity-100 hover:text-saikou-primary transition-all">Shop Ikon</Link></li>
+                  <li><a href="#" className="opacity-80 hover:opacity-100 hover:text-saikou-primary transition-all">Blog</a></li>
+                </ul>
               </div>
-              <div className="flex flex-wrap gap-6 justify-center">
-                <Link to="/" className="font-darker-grotesque opacity-80 hover:opacity-100 hover:text-saikou-primary transition-all">Home</Link>
-                <Link to="/products" className="font-darker-grotesque opacity-80 hover:opacity-100 hover:text-saikou-primary transition-all">Products</Link>
-                <a href="mailto:info@saikoushop.com" className="font-darker-grotesque opacity-80 hover:opacity-100 hover:text-saikou-primary transition-all">Support</a>
+              
+              <div>
+                <h4 className="font-space-grotesk font-semibold mb-4">Saikou</h4>
+                <ul className="space-y-2 font-darker-grotesque">
+                  <li><Link to="/about-us" className="opacity-80 hover:opacity-100 hover:text-saikou-primary transition-all">About Us</Link></li>
+                  <li><Link to="/contact-us" className="opacity-80 hover:opacity-100 hover:text-saikou-primary transition-all">Contact Us</Link></li>
+                  <li><a href="#" className="opacity-80 hover:opacity-100 hover:text-saikou-primary transition-all">Shipping Policy</a></li>
+                  <li><a href="#" className="opacity-80 hover:opacity-100 hover:text-saikou-primary transition-all">Returns & FAQ</a></li>
+                </ul>
+              </div>
+              
+              <div>
+                <h4 className="font-space-grotesk font-semibold mb-4">Community</h4>
+                <ul className="space-y-2 font-darker-grotesque">
+                  <li><a href="https://chat.whatsapp.com/LdEzPs02oZ2LcMy5fhnH5T" target="_blank" rel="noopener noreferrer" className="opacity-80 hover:opacity-100 hover:text-saikou-primary transition-all">Join WhatsApp Group</a></li>
+                  <li><a href="#" className="opacity-80 hover:opacity-100 hover:text-saikou-primary transition-all">Instagram</a></li>
+                  <li><a href="#" className="opacity-80 hover:opacity-100 hover:text-saikou-primary transition-all">YouTube</a></li>
+                </ul>
+              </div>
+              
+              <div>
+                <h4 className="font-space-grotesk font-semibold mb-4">Legal</h4>
+                <ul className="space-y-2 font-darker-grotesque">
+                  <li><a href="#" className="opacity-80 hover:opacity-100 hover:text-saikou-primary transition-all">Cookie Policy</a></li>
+                  <li><a href="#" className="opacity-80 hover:opacity-100 hover:text-saikou-primary transition-all">Privacy Policy</a></li>
+                  <li><a href="#" className="opacity-80 hover:opacity-100 hover:text-saikou-primary transition-all">Terms & Conditions</a></li>
+                </ul>
               </div>
             </div>
+            
             <div className="text-center pt-8 border-t border-gray-600">
-              <p className="font-darker-grotesque opacity-60">&copy; 2024 Saikou. All rights reserved. Proudly made in India.</p>
+              <p className="font-darker-grotesque opacity-60">&copy; 2025 Saikou Figures. Made with ✨ in India.</p>
             </div>
           </div>
         </footer>
