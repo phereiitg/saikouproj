@@ -1,5 +1,4 @@
-
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { ChevronLeft, ChevronRight, Star, Shield, Heart, Zap, MessageSquare, ExternalLink, Mail } from 'lucide-react';
 import PageTransition from '../components/PageTransition';
@@ -9,6 +8,39 @@ const Index = () => {
   const [cart, setCart] = useState<Array<{id: string, name: string, price: string}>>([]);
   const [showCartNotification, setShowCartNotification] = useState(false);
   const [email, setEmail] = useState('');
+
+  // Intersection Observer for smooth scroll animations
+  const observerRef = useRef<IntersectionObserver | null>(null);
+
+  useEffect(() => {
+    // Remove preload class for smooth animations
+    document.body.classList.remove('preload');
+    
+    // Setup Intersection Observer for scroll animations
+    observerRef.current = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('in-view');
+          }
+        });
+      },
+      {
+        threshold: 0.1,
+        rootMargin: '0px 0px -50px 0px'
+      }
+    );
+
+    // Observe all animation elements
+    const animationElements = document.querySelectorAll('.fade-in-view, .slide-in-left-view, .slide-in-right-view');
+    animationElements.forEach((el) => {
+      observerRef.current?.observe(el);
+    });
+
+    return () => {
+      observerRef.current?.disconnect();
+    };
+  }, []);
 
   const heroSlides = [
     {
@@ -54,14 +86,26 @@ const Index = () => {
     return () => clearInterval(timer);
   }, []);
 
+  useEffect(() => {
+    // Add preload class initially
+    document.body.classList.add('preload');
+    
+    // Remove it after a short delay to enable smooth animations
+    const timer = setTimeout(() => {
+      document.body.classList.remove('preload');
+    }, 100);
+
+    return () => clearTimeout(timer);
+  }, []);
+
   return (
     <PageTransition>
-      <div className="min-h-screen">
+      <div className="min-h-screen scroll-container">
         {/* Header */}
         <header className="fixed top-0 left-0 right-0 bg-white/95 backdrop-blur-lg border-b border-gray-100 shadow-sm z-50">
           <nav className="container mx-auto px-4 py-4">
             <div className="flex justify-between items-center">
-              <Link to="/" className="flex items-center gap-4">
+              <Link to="/" className="flex items-center gap-4 hover-scale">
                 <div className="flex flex-col items-center">
                   <img 
                     src="/lovable-uploads/3e213b54-d1c4-457a-8f53-e7fa0d65b186.png" 
@@ -72,7 +116,7 @@ const Index = () => {
                 </div>
               </Link>
               <div className="hidden md:flex items-center gap-8">
-                <Link to="/" className="text-saikou-accent font-darker-grotesque font-medium relative">
+                <Link to="/" className="text-saikou-accent font-darker-grotesque font-medium relative hover:text-saikou-primary transition-colors">
                   Home
                   <span className="absolute bottom-0 left-0 w-full h-0.5 bg-saikou-accent"></span>
                 </Link>
@@ -88,7 +132,7 @@ const Index = () => {
                 <Link to="/my-account" className="text-saikou-secondary font-darker-grotesque font-medium hover:text-saikou-accent transition-colors">
                   My Account
                 </Link>
-                <Link to="/cart" className="bg-gradient-to-r from-saikou-primary to-saikou-accent text-saikou-secondary px-6 py-2.5 rounded-full flex items-center gap-2 font-darker-grotesque font-semibold hover:shadow-lg transition-all">
+                <Link to="/cart" className="bg-gradient-to-r from-saikou-primary to-saikou-accent text-saikou-secondary px-6 py-2.5 rounded-full flex items-center gap-2 font-darker-grotesque font-semibold hover-lift">
                   <span>🛒</span>
                   <span className="bg-saikou-secondary text-white rounded-full w-6 h-6 flex items-center justify-center text-sm">
                     {cart.length}
@@ -100,8 +144,8 @@ const Index = () => {
         </header>
 
         {/* 1. Hero Banner (Slideshow) */}
-        <section className="pt-24 bg-gradient-to-br from-saikou-background via-white to-saikou-background relative overflow-hidden">
-          <div className="container mx-auto px-4 py-16">
+        <section className="pt-24 bg-gradient-to-br from-saikou-background via-white to-saikou-background relative overflow-hidden scroll-section">
+          <div className="container mx-auto px-4 section-spacing">
             <div className="relative">
               {heroSlides.map((slide, index) => (
                 <div
@@ -113,7 +157,7 @@ const Index = () => {
                   }`}
                 >
                   <div className="grid lg:grid-cols-2 gap-12 items-center min-h-[600px]">
-                    <div className="space-y-8">
+                    <div className="space-y-8 slide-in-left-view">
                       <h1 className="text-4xl lg:text-6xl font-space-grotesk font-bold leading-tight bg-gradient-to-r from-saikou-secondary to-saikou-accent bg-clip-text text-transparent">
                         {slide.title}
                       </h1>
@@ -123,18 +167,18 @@ const Index = () => {
                       <div className="flex gap-4">
                         <Link 
                           to={slide.ctaLink}
-                          className="bg-gradient-to-r from-saikou-primary to-saikou-accent text-saikou-secondary px-8 py-4 rounded-lg font-darker-grotesque font-semibold hover:shadow-lg transition-all"
+                          className="bg-gradient-to-r from-saikou-primary to-saikou-accent text-saikou-secondary px-8 py-4 rounded-lg font-darker-grotesque font-semibold hover-lift card-shadow"
                         >
                           {slide.cta}
                         </Link>
                       </div>
                     </div>
-                    <div className="relative">
+                    <div className="relative slide-in-right-view">
                       <div className="absolute inset-0 bg-gradient-to-r from-saikou-primary/20 to-saikou-accent/20 rounded-2xl transform rotate-3"></div>
                       <img 
                         src={slide.image} 
                         alt={slide.title} 
-                        className="relative z-10 w-full max-w-md mx-auto"
+                        className="relative z-10 w-full max-w-md mx-auto hover-scale"
                       />
                     </div>
                   </div>
@@ -142,10 +186,10 @@ const Index = () => {
               ))}
               
               {/* Navigation */}
-              <button onClick={prevSlide} className="absolute left-4 top-1/2 transform -translate-y-1/2 bg-white/80 backdrop-blur-sm p-3 rounded-full shadow-lg hover:bg-white transition-all z-10">
+              <button onClick={prevSlide} className="absolute left-4 top-1/2 transform -translate-y-1/2 bg-white/90 backdrop-blur-sm p-3 rounded-full shadow-lg hover-lift z-10">
                 <ChevronLeft className="w-6 h-6 text-saikou-secondary" />
               </button>
-              <button onClick={nextSlide} className="absolute right-4 top-1/2 transform -translate-y-1/2 bg-white/80 backdrop-blur-sm p-3 rounded-full shadow-lg hover:bg-white transition-all z-10">
+              <button onClick={nextSlide} className="absolute right-4 top-1/2 transform -translate-y-1/2 bg-white/90 backdrop-blur-sm p-3 rounded-full shadow-lg hover-lift z-10">
                 <ChevronRight className="w-6 h-6 text-saikou-secondary" />
               </button>
               
@@ -154,10 +198,10 @@ const Index = () => {
                   <button
                     key={index}
                     onClick={() => setCurrentSlide(index)}
-                    className={`w-3 h-3 rounded-full transition-all ${
+                    className={`w-3 h-3 rounded-full transition-all duration-300 ${
                       index === currentSlide 
                         ? 'bg-saikou-accent scale-125' 
-                        : 'bg-white/50 hover:bg-white/80'
+                        : 'bg-white/50 hover:bg-white/80 hover-scale'
                     }`}
                   />
                 ))}
@@ -167,10 +211,10 @@ const Index = () => {
         </section>
 
         {/* 2. About Saikou (Intro) */}
-        <section className="py-20 bg-white">
+        <section className="section-spacing bg-white scroll-section">
           <div className="container mx-auto px-4">
             <div className="grid lg:grid-cols-2 gap-16 items-center">
-              <div className="space-y-8">
+              <div className="space-y-8 slide-in-left-view">
                 <h2 className="text-4xl font-space-grotesk font-bold text-saikou-secondary">
                   Not Just Figures—Shelf Royalty.
                 </h2>
@@ -179,16 +223,16 @@ const Index = () => {
                 </p>
                 <Link 
                   to="/about-us"
-                  className="inline-block bg-gradient-to-r from-saikou-primary to-saikou-accent text-saikou-secondary px-8 py-4 rounded-lg font-darker-grotesque font-semibold hover:shadow-lg transition-all"
+                  className="inline-block bg-gradient-to-r from-saikou-primary to-saikou-accent text-saikou-secondary px-8 py-4 rounded-lg font-darker-grotesque font-semibold hover-lift card-shadow"
                 >
                   Read More About Us
                 </Link>
               </div>
-              <div className="relative">
+              <div className="relative slide-in-right-view">
                 <img 
                   src="/lovable-uploads/3e213b54-d1c4-457a-8f53-e7fa0d65b186.png" 
                   alt="Saikou Crafting Process" 
-                  className="w-full rounded-xl shadow-lg"
+                  className="w-full rounded-xl shadow-lg hover-scale"
                 />
               </div>
             </div>
@@ -196,9 +240,9 @@ const Index = () => {
         </section>
 
         {/* 3. Featured Collections: Saikou vs Ikon */}
-        <section className="py-20 bg-gradient-to-br from-saikou-background to-white">
+        <section className="section-spacing bg-gradient-to-br from-saikou-background to-white scroll-section">
           <div className="container mx-auto px-4">
-            <div className="text-center mb-16">
+            <div className="text-center mb-16 fade-in-view">
               <h2 className="text-4xl font-space-grotesk font-bold mb-4 bg-gradient-to-r from-saikou-secondary to-saikou-accent bg-clip-text text-transparent">
                 Featured Collections
               </h2>
@@ -206,23 +250,23 @@ const Index = () => {
             </div>
             
             <div className="grid lg:grid-cols-2 gap-12">
-              <div className="bg-white/80 backdrop-blur-sm rounded-xl p-8 shadow-lg">
+              <div className="bg-white/80 backdrop-blur-sm rounded-xl p-8 card-shadow hover-lift slide-in-left-view">
                 <h3 className="text-2xl font-space-grotesk font-bold text-saikou-secondary mb-4">Saikou</h3>
                 <p className="text-gray-600 font-darker-grotesque mb-6">Full-scene action figures (dynamic poses, full bases).</p>
                 <Link 
                   to="/products"
-                  className="bg-gradient-to-r from-saikou-primary to-saikou-accent text-saikou-secondary px-6 py-3 rounded-lg font-darker-grotesque font-semibold hover:shadow-lg transition-all inline-block"
+                  className="bg-gradient-to-r from-saikou-primary to-saikou-accent text-saikou-secondary px-6 py-3 rounded-lg font-darker-grotesque font-semibold hover-lift transition-all inline-block"
                 >
                   Shop Saikou
                 </Link>
               </div>
               
-              <div className="bg-white/80 backdrop-blur-sm rounded-xl p-8 shadow-lg">
+              <div className="bg-white/80 backdrop-blur-sm rounded-xl p-8 card-shadow hover-lift slide-in-right-view">
                 <h3 className="text-2xl font-space-grotesk font-bold text-saikou-secondary mb-4">Ikon</h3>
                 <p className="text-gray-600 font-darker-grotesque mb-6">Bold, bust-style statues (clean display, strong character energy).</p>
                 <Link 
                   to="/products"
-                  className="bg-saikou-background border-2 border-saikou-primary text-saikou-secondary px-6 py-3 rounded-lg font-darker-grotesque font-semibold hover:bg-saikou-primary transition-all inline-block"
+                  className="bg-saikou-background border-2 border-saikou-primary text-saikou-secondary px-6 py-3 rounded-lg font-darker-grotesque font-semibold hover:bg-saikou-primary hover-lift transition-all inline-block"
                 >
                   Shop Ikon
                 </Link>
@@ -232,10 +276,10 @@ const Index = () => {
         </section>
 
         {/* 4. Top Product: Superman */}
-        <section className="py-20 bg-white">
+        <section className="section-spacing bg-white scroll-section">
           <div className="container mx-auto px-4">
             <div className="grid lg:grid-cols-2 gap-16 items-center">
-              <div className="space-y-8">
+              <div className="space-y-8 slide-in-left-view">
                 <h2 className="text-4xl font-space-grotesk font-bold text-saikou-secondary">
                   Kal-El lands with power.
                 </h2>
@@ -245,23 +289,23 @@ const Index = () => {
                 <div className="flex gap-4">
                   <Link 
                     to="/product/1"
-                    className="bg-gradient-to-r from-saikou-primary to-saikou-accent text-saikou-secondary px-8 py-4 rounded-lg font-darker-grotesque font-semibold hover:shadow-lg transition-all"
+                    className="bg-gradient-to-r from-saikou-primary to-saikou-accent text-saikou-secondary px-8 py-4 rounded-lg font-darker-grotesque font-semibold hover-lift card-shadow"
                   >
                     View Product
                   </Link>
                   <button 
                     onClick={() => addToCart('1', 'Superman Premium Action Figure', '₹4,999')}
-                    className="bg-saikou-background border-2 border-saikou-primary text-saikou-secondary px-8 py-4 rounded-lg font-darker-grotesque font-semibold hover:bg-saikou-primary transition-all"
+                    className="bg-saikou-background border-2 border-saikou-primary text-saikou-secondary px-8 py-4 rounded-lg font-darker-grotesque font-semibold hover:bg-saikou-primary hover-lift transition-all"
                   >
                     Add to Cart
                   </button>
                 </div>
               </div>
-              <div className="relative">
+              <div className="relative slide-in-right-view">
                 <img 
                   src="/lovable-uploads/3c35d07e-c58f-4fb2-8ba1-7aa5ed88a07f.png" 
                   alt="Superman Premium Action Figure" 
-                  className="w-full max-w-md mx-auto"
+                  className="w-full max-w-md mx-auto hover-scale"
                 />
               </div>
             </div>
@@ -269,7 +313,7 @@ const Index = () => {
         </section>
 
         {/* 5. Top Product: Sung Jin-Woo */}
-        <section className="py-20 bg-gradient-to-br from-gray-900 to-black text-white relative overflow-hidden">
+        <section className="section-spacing bg-gradient-to-br from-gray-900 to-black text-white relative overflow-hidden scroll-section">
           <div className="absolute inset-0 bg-gradient-to-r from-purple-900/20 to-blue-900/20"></div>
           <div className="container mx-auto px-4 relative z-10">
             <div className="grid lg:grid-cols-2 gap-16 items-center">
@@ -301,7 +345,7 @@ const Index = () => {
         </section>
 
         {/* 6. New Launches & Upcoming Drops */}
-        <section className="py-20 bg-gradient-to-br from-saikou-background to-white">
+        <section className="section-spacing bg-gradient-to-br from-saikou-background to-white scroll-section">
           <div className="container mx-auto px-4">
             <div className="grid lg:grid-cols-2 gap-16 items-center">
               <div className="space-y-8">
@@ -336,67 +380,48 @@ const Index = () => {
           </div>
         </section>
 
-        {/* 7. Our USPs */}
-        <section className="py-20 bg-white">
+        {/* 7. Our USPs with enhanced animations */}
+        <section className="section-spacing bg-white scroll-section">
           <div className="container mx-auto px-4">
             <div className="grid lg:grid-cols-2 gap-16 items-center">
-              <div className="space-y-8">
+              <div className="space-y-8 slide-in-left-view">
                 <h2 className="text-4xl font-space-grotesk font-bold text-saikou-secondary mb-8">
                   Why Choose Saikou?
                 </h2>
                 <div className="space-y-6">
-                  <div className="flex items-center gap-4">
-                    <span className="text-2xl">🇮🇳</span>
-                    <div>
-                      <h3 className="text-xl font-space-grotesk font-semibold text-saikou-secondary">Made Here. Not Meh.</h3>
-                      <p className="font-darker-grotesque text-gray-600">Proudly crafted in India with global quality standards</p>
+                  {[
+                    { emoji: "🇮🇳", title: "Made Here. Not Meh.", desc: "Proudly crafted in India with global quality standards" },
+                    { emoji: "🧐", title: "Details So Good, It's Rude.", desc: "Obsessing over every detail, from expressions to textures" },
+                    { emoji: "🧠", title: "For Collectors, Not Kids.", desc: "Display-worthy collectibles for serious fans" },
+                    { emoji: "🎁", title: "Gift It. Brag About It.", desc: "Perfect gifts that impress even the nerdiest hearts" }
+                  ].map((item, index) => (
+                    <div key={index} className={`flex items-center gap-4 fade-in-view stagger-delay-${index + 1}`}>
+                      <span className="text-2xl">{item.emoji}</span>
+                      <div>
+                        <h3 className="text-xl font-space-grotesk font-semibold text-saikou-secondary">{item.title}</h3>
+                        <p className="font-darker-grotesque text-gray-600">{item.desc}</p>
+                      </div>
                     </div>
-                  </div>
-                  <div className="flex items-center gap-4">
-                    <span className="text-2xl">🧐</span>
-                    <div>
-                      <h3 className="text-xl font-space-grotesk font-semibold text-saikou-secondary">Details So Good, It's Rude.</h3>
-                      <p className="font-darker-grotesque text-gray-600">Obsessing over every detail, from expressions to textures</p>
-                    </div>
-                  </div>
-                  <div className="flex items-center gap-4">
-                    <span className="text-2xl">🧠</span>
-                    <div>
-                      <h3 className="text-xl font-space-grotesk font-semibold text-saikou-secondary">For Collectors, Not Kids.</h3>
-                      <p className="font-darker-grotesque text-gray-600">Display-worthy collectibles for serious fans</p>
-                    </div>
-                  </div>
-                  <div className="flex items-center gap-4">
-                    <span className="text-2xl">🎁</span>
-                    <div>
-                      <h3 className="text-xl font-space-grotesk font-semibold text-saikou-secondary">Gift It. Brag About It.</h3>
-                      <p className="font-darker-grotesque text-gray-600">Perfect gifts that impress even the nerdiest hearts</p>
-                    </div>
-                  </div>
+                  ))}
                 </div>
               </div>
-              <div className="text-center">
+              <div className="text-center slide-in-right-view">
                 <div className="grid grid-cols-2 gap-4">
-                  <div className="p-6 bg-gradient-to-br from-saikou-background to-white rounded-xl shadow-lg">
-                    <Star className="w-8 h-8 text-saikou-accent mx-auto mb-2" />
-                    <div className="text-2xl font-space-grotesk font-bold text-saikou-accent">Premium</div>
-                    <div className="text-sm font-darker-grotesque text-gray-600">Quality</div>
-                  </div>
-                  <div className="p-6 bg-gradient-to-br from-saikou-background to-white rounded-xl shadow-lg">
-                    <Shield className="w-8 h-8 text-saikou-accent mx-auto mb-2" />
-                    <div className="text-2xl font-space-grotesk font-bold text-saikou-accent">100%</div>
-                    <div className="text-sm font-darker-grotesque text-gray-600">Authentic</div>
-                  </div>
-                  <div className="p-6 bg-gradient-to-br from-saikou-background to-white rounded-xl shadow-lg">
-                    <Heart className="w-8 h-8 text-saikou-accent mx-auto mb-2" />
-                    <div className="text-2xl font-space-grotesk font-bold text-saikou-accent">Made</div>
-                    <div className="text-sm font-darker-grotesque text-gray-600">in India</div>
-                  </div>
-                  <div className="p-6 bg-gradient-to-br from-saikou-background to-white rounded-xl shadow-lg">
-                    <Zap className="w-8 h-8 text-saikou-accent mx-auto mb-2" />
-                    <div className="text-2xl font-space-grotesk font-bold text-saikou-accent">Fast</div>
-                    <div className="text-sm font-darker-grotesque text-gray-600">Delivery</div>
-                  </div>
+                  {[
+                    { icon: Star, title: "Premium", subtitle: "Quality" },
+                    { icon: Shield, title: "100%", subtitle: "Authentic" },
+                    { icon: Heart, title: "Made", subtitle: "in India" },
+                    { icon: Zap, title: "Fast", subtitle: "Delivery" }
+                  ].map((item, index) => {
+                    const Icon = item.icon;
+                    return (
+                      <div key={index} className={`p-6 bg-gradient-to-br from-saikou-background to-white rounded-xl card-shadow hover-lift fade-in-view stagger-delay-${index + 1}`}>
+                        <Icon className="w-8 h-8 text-saikou-accent mx-auto mb-2" />
+                        <div className="text-2xl font-space-grotesk font-bold text-saikou-accent">{item.title}</div>
+                        <div className="text-sm font-darker-grotesque text-gray-600">{item.subtitle}</div>
+                      </div>
+                    );
+                  })}
                 </div>
               </div>
             </div>
@@ -404,7 +429,7 @@ const Index = () => {
         </section>
 
         {/* 8. Join the Saikou WhatsApp Community */}
-        <section className="py-20 bg-gradient-to-br from-green-500 to-green-600 text-white">
+        <section className="section-spacing bg-gradient-to-br from-green-500 to-green-600 text-white scroll-section">
           <div className="container mx-auto px-4">
             <div className="grid lg:grid-cols-2 gap-16 items-center">
               <div className="space-y-8">
@@ -436,7 +461,7 @@ const Index = () => {
         </section>
 
         {/* 9. Fan Picks: Top 10 Most-Wanted Anime Characters */}
-        <section className="py-20 bg-white">
+        <section className="section-spacing bg-white scroll-section">
           <div className="container mx-auto px-4">
             <div className="grid lg:grid-cols-2 gap-16 items-center">
               <div className="space-y-8">
@@ -470,7 +495,7 @@ const Index = () => {
         </section>
 
         {/* 10. Blog Highlight Section */}
-        <section className="py-20 bg-gradient-to-br from-saikou-background to-white">
+        <section className="section-spacing bg-gradient-to-br from-saikou-background to-white scroll-section">
           <div className="container mx-auto px-4">
             <div className="grid lg:grid-cols-2 gap-16 items-center">
               <div className="space-y-8">
@@ -502,7 +527,7 @@ const Index = () => {
         </section>
 
         {/* 11. Customer Testimonials / Reviews */}
-        <section className="py-20 bg-white">
+        <section className="section-spacing bg-white scroll-section">
           <div className="container mx-auto px-4">
             <div className="text-center mb-16">
               <h2 className="text-4xl font-space-grotesk font-bold mb-4 text-saikou-secondary">
@@ -549,7 +574,7 @@ const Index = () => {
         </section>
 
         {/* 12. Gifting Section */}
-        <section className="py-20 bg-gradient-to-br from-red-50 to-pink-50">
+        <section className="section-spacing bg-gradient-to-br from-red-50 to-pink-50 scroll-section">
           <div className="container mx-auto px-4">
             <div className="grid lg:grid-cols-2 gap-16 items-center">
               <div className="space-y-8">
@@ -581,7 +606,7 @@ const Index = () => {
         </section>
 
         {/* 13. Newsletter Signup */}
-        <section id="newsletter" className="py-16 bg-gradient-to-br from-saikou-secondary to-gray-800 text-white">
+        <section id="newsletter" className="section-spacing py-16 bg-gradient-to-br from-saikou-secondary to-gray-800 text-white scroll-section">
           <div className="container mx-auto px-4">
             <div className="max-w-2xl mx-auto text-center">
               <h2 className="text-3xl font-space-grotesk font-bold mb-4">
@@ -611,58 +636,76 @@ const Index = () => {
           </div>
         </section>
 
-        {/* Footer */}
-        <footer className="py-12 bg-gradient-to-br from-saikou-secondary to-gray-800 text-white">
+        {/* Footer with enhanced animations */}
+        <footer className="section-spacing bg-gradient-to-br from-saikou-secondary to-gray-800 text-white scroll-section">
           <div className="container mx-auto px-4">
             <div className="grid md:grid-cols-4 gap-8 mb-8">
-              <div>
-                <h4 className="font-space-grotesk font-semibold mb-4">Explore</h4>
-                <ul className="space-y-2 font-darker-grotesque">
-                  <li><Link to="/" className="opacity-80 hover:opacity-100 hover:text-saikou-primary transition-all">Home</Link></li>
-                  <li><Link to="/products" className="opacity-80 hover:opacity-100 hover:text-saikou-primary transition-all">Shop Saikou</Link></li>
-                  <li><Link to="/products" className="opacity-80 hover:opacity-100 hover:text-saikou-primary transition-all">Shop Ikon</Link></li>
-                  <li><a href="#" className="opacity-80 hover:opacity-100 hover:text-saikou-primary transition-all">Blog</a></li>
-                </ul>
-              </div>
-              
-              <div>
-                <h4 className="font-space-grotesk font-semibold mb-4">Saikou</h4>
-                <ul className="space-y-2 font-darker-grotesque">
-                  <li><Link to="/about-us" className="opacity-80 hover:opacity-100 hover:text-saikou-primary transition-all">About Us</Link></li>
-                  <li><Link to="/contact-us" className="opacity-80 hover:opacity-100 hover:text-saikou-primary transition-all">Contact Us</Link></li>
-                  <li><a href="#" className="opacity-80 hover:opacity-100 hover:text-saikou-primary transition-all">Shipping Policy</a></li>
-                  <li><a href="#" className="opacity-80 hover:opacity-100 hover:text-saikou-primary transition-all">Returns & FAQ</a></li>
-                </ul>
-              </div>
-              
-              <div>
-                <h4 className="font-space-grotesk font-semibold mb-4">Community</h4>
-                <ul className="space-y-2 font-darker-grotesque">
-                  <li><a href="https://chat.whatsapp.com/LdEzPs02oZ2LcMy5fhnH5T" target="_blank" rel="noopener noreferrer" className="opacity-80 hover:opacity-100 hover:text-saikou-primary transition-all">Join WhatsApp Group</a></li>
-                  <li><a href="#" className="opacity-80 hover:opacity-100 hover:text-saikou-primary transition-all">Instagram</a></li>
-                  <li><a href="#" className="opacity-80 hover:opacity-100 hover:text-saikou-primary transition-all">YouTube</a></li>
-                </ul>
-              </div>
-              
-              <div>
-                <h4 className="font-space-grotesk font-semibold mb-4">Legal</h4>
-                <ul className="space-y-2 font-darker-grotesque">
-                  <li><a href="#" className="opacity-80 hover:opacity-100 hover:text-saikou-primary transition-all">Cookie Policy</a></li>
-                  <li><a href="#" className="opacity-80 hover:opacity-100 hover:text-saikou-primary transition-all">Privacy Policy</a></li>
-                  <li><a href="#" className="opacity-80 hover:opacity-100 hover:text-saikou-primary transition-all">Terms & Conditions</a></li>
-                </ul>
-              </div>
+              {[
+                {
+                  title: "Explore",
+                  links: [
+                    { text: "Home", to: "/" },
+                    { text: "Shop Saikou", to: "/products" },
+                    { text: "Shop Ikon", to: "/products" },
+                    { text: "Blog", to: "#" }
+                  ]
+                },
+                {
+                  title: "Saikou",
+                  links: [
+                    { text: "About Us", to: "/about-us" },
+                    { text: "Contact Us", to: "/contact-us" },
+                    { text: "Shipping Policy", to: "#" },
+                    { text: "Returns & FAQ", to: "#" }
+                  ]
+                },
+                {
+                  title: "Community",
+                  links: [
+                    { text: "Join WhatsApp Group", to: "https://chat.whatsapp.com/LdEzPs02oZ2LcMy5fhnH5T", external: true },
+                    { text: "Instagram", to: "#" },
+                    { text: "YouTube", to: "#" }
+                  ]
+                },
+                {
+                  title: "Legal",
+                  links: [
+                    { text: "Cookie Policy", to: "#" },
+                    { text: "Privacy Policy", to: "#" },
+                    { text: "Terms & Conditions", to: "#" }
+                  ]
+                }
+              ].map((section, index) => (
+                <div key={index} className={`fade-in-view stagger-delay-${index + 1}`}>
+                  <h4 className="font-space-grotesk font-semibold mb-4">{section.title}</h4>
+                  <ul className="space-y-2 font-darker-grotesque">
+                    {section.links.map((link, linkIndex) => (
+                      <li key={linkIndex}>
+                        {link.external ? (
+                          <a href={link.to} target="_blank" rel="noopener noreferrer" className="opacity-80 hover:opacity-100 hover:text-saikou-primary transition-all">
+                            {link.text}
+                          </a>
+                        ) : (
+                          <Link to={link.to} className="opacity-80 hover:opacity-100 hover:text-saikou-primary transition-all">
+                            {link.text}
+                          </Link>
+                        )}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              ))}
             </div>
             
-            <div className="text-center pt-8 border-t border-gray-600">
+            <div className="text-center pt-8 border-t border-gray-600 fade-in-view">
               <p className="font-darker-grotesque opacity-60">&copy; 2025 Saikou Figures. Made with ✨ in India.</p>
             </div>
           </div>
         </footer>
 
-        {/* Cart Notification */}
+        {/* Cart Notification with enhanced animation */}
         {showCartNotification && (
-          <div className="fixed top-24 right-4 bg-gradient-to-r from-saikou-primary to-saikou-accent text-saikou-secondary px-6 py-3 rounded-lg shadow-lg z-50 font-darker-grotesque font-semibold">
+          <div className="fixed top-24 right-4 bg-gradient-to-r from-saikou-primary to-saikou-accent text-saikou-secondary px-6 py-3 rounded-lg shadow-lg z-50 font-darker-grotesque font-semibold animate-scale-in">
             <div className="flex items-center gap-2">
               <span>🎉</span>
               Item added to cart!
