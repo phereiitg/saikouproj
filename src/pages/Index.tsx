@@ -655,8 +655,8 @@ const Index = () => {
                   links: [
                     { text: "About Us", to: "/about-us" },
                     { text: "Contact Us", to: "/contact-us" },
-                    { text: "Shipping Policy", to: "#" },
-                    { text: "Returns & FAQ", to: "#" }
+                    { text: "Shipping Policy", to: "/shipping-policy" },
+                    { text: "Returns & FAQ", to: "/returns-refunds" }
                   ]
                 },
                 {
@@ -670,9 +670,9 @@ const Index = () => {
                 {
                   title: "Legal",
                   links: [
-                    { text: "Cookie Policy", to: "#" },
-                    { text: "Privacy Policy", to: "#" },
-                    { text: "Terms & Conditions", to: "#" }
+                    { text: "Cookie Policy", to: "/cookie-policy" },
+                    { text: "Privacy Policy", to: "/privacy-policy" },
+                    { text: "Terms & Conditions", to: "/terms-conditions" }
                   ]
                 }
               ].map((section, index) => (
