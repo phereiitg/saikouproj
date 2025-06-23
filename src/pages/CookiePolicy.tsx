@@ -1,7 +1,6 @@
-
 import { Link } from 'react-router-dom';
 import PageTransition from '../components/PageTransition';
-import { Cookie, Settings, Eye } from 'lucide-react';
+import { Cookie, Settings, Eye, Shield } from 'lucide-react';
 
 const CookiePolicy = () => {
   return (
